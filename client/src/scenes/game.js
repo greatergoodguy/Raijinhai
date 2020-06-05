@@ -15,6 +15,15 @@ export default class Game extends Phaser.Scene {
         this.load.image('cyanCardBack', 'src/assets/CyanCardBack.png')
         this.load.image('magentaCardFront', 'src/assets/MagentaCardFront.png')
         this.load.image('magentaCardBack', 'src/assets/MagentaCardBack.png')
+
+        this.load.image('Card01Soldier', 'src/assets/Card01Soldier.png')
+        this.load.image('Card02Calvary', 'src/assets/Card02Calvary.png')
+        this.load.image('Card03Elephant', 'src/assets/Card03Elephant.png')
+        this.load.image('Card04Shogun', 'src/assets/Card04Shogun.png')
+        this.load.image('Card05Queen', 'src/assets/Card05Queen.png')
+        this.load.image('Card06King', 'src/assets/Card06King.png')
+        this.load.image('Card07Indra', 'src/assets/Card07Indra.png')
+        this.load.image('CardTemplateBack', 'src/assets/CardTemplateBack.png')
     }
 
     create() {
@@ -24,8 +33,13 @@ export default class Game extends Phaser.Scene {
         this.opponentCards = []
 
         this.zone = new Zone(this)
-        this.dropZone = this.zone.renderZone()
-        this.outline = this.zone.renderOutline(this.dropZone)
+        this.playerDropZone = this.zone.renderZone(400, 375)
+        this.playerDropZoneOutline = this.zone.renderOutline(this.playerDropZone)
+
+        this.opponentDropZone = this.zone.renderZone(1100, 375)
+        this.opponentDropZone.disableInteractive()
+        this.opponentDropZoneOutline = this.zone.renderOutline(this.opponentDropZone)
+        
         this.dealer = new Dealer(this)
 
         this.socket = io('http://localhost:3000')
@@ -48,9 +62,9 @@ export default class Game extends Phaser.Scene {
                 let sprite = gameObject.textureKey
                 console.log(sprite)
                 self.opponentCards.shift().destroy()
-                self.dropZone.data.values.cards++
-                let card = new Card(self)
-                card.render((self.dropZone.x - 350) + (self.dropZone.data.values.cards * 50), (self.dropZone.y), sprite).disableInteractive()
+                self.playerDropZone.data.values.cards++
+                let card = new Card(self, self.opponentDropZone.x, self.opponentDropZone.y)
+                card.render(sprite).disableInteractive()
             }
 
         })
@@ -88,12 +102,15 @@ export default class Game extends Phaser.Scene {
         })
 
         this.input.on('drop', function(pointer, gameObject, dropZone) {
-            dropZone.data.values.cards++
-            gameObject.x = (dropZone.x - 350) + (dropZone.data.values.cards * 50)
-            console.log(gameObject.x)
-            gameObject.y = dropZone.y
-            gameObject.disableInteractive()
-            self.socket.emit('cardPlayed', gameObject, self.isPlayerA)
+            if(!dropZone.data.values.isOccupied) {
+                dropZone.data.values.isOccupied = true
+                dropZone.disableInteractive()
+                dropZone.data.values.cards++
+                gameObject.x = dropZone.x
+                gameObject.y = dropZone.y
+                gameObject.disableInteractive()
+                self.socket.emit('cardPlayed', gameObject, self.isPlayerA)
+            }
         })
     }
 
