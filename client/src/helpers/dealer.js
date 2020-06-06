@@ -12,7 +12,7 @@ export default class Dealer {
                 console.log('isPlayerA')
                 for (let i = 0; i<10; i++) {
                     let opponentCard = new Card(scene, xOffset + 130*i, 125)
-                    scene.opponentCards.push(opponentCard.render('CardTemplateBack').disableInteractive().setTint(0xff69b4))
+                    scene.opponentCards.push(opponentCard.render('CardTemplateBack').disableInteractive())
                 }
 
             } else {

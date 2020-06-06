@@ -86,36 +86,62 @@ export default class Game extends Phaser.Scene {
         socket.on('cardPlayed', function(textureKey, socketId) {
             console.log('socket.on(cardPlayed)')
             if(socketId !== socket.id) {
-                let sprite = 'CardTemplateBack'
-                var removedCard = self.opponentCards.shift()
-                removedCard.data = null
-                console.log(removedCard)
-                removedCard.destroy()
-                let card = new Card(self, self.opponentDropZone.x, self.opponentDropZone.y)
-                self.opponentZoneCard = card.render(sprite).disableInteractive()
+                var playedCard = self.opponentCards.shift()
+                console.log(self.opponentCards)
+                playedCard.x = self.opponentDropZone.x;
+                playedCard.y = self.opponentDropZone.y
+                playedCard.data['textureKey'] = textureKey
+                self.opponentZoneCard = playedCard
             }
 
         })
 
         socket.on('turnFinished', function(turnData) {
+            self.opponentZoneCard.setTexture(self.opponentZoneCard.data['textureKey'])
             console.log(turnData)
             let playerPointValue = pieceValues[turnData[socket.id]]
             let opponentPointValue = pieceValues[turnData[self.opponentId]]
             console.log('playerPointValue: ' + playerPointValue)
             console.log('opponentPointValue: ' + opponentPointValue)
+            console.log(self.opponentZoneCard)
 
             if(playerPointValue > opponentPointValue) {
                 self.zoneText.setText("You Win")
-                setTimeout(function() { 
-                    self.playerZoneCard.x = self.playerZoneCard.data['originX']
-                    self.playerZoneCard.y = self.playerZoneCard.data['originY']
-                    self.opponentZoneCard.data = null
-                    self.opponentZoneCard.destroy()
-                 }, 1000);
             } else if(playerPointValue < opponentPointValue) {
                 self.zoneText.setText("You Lose")
             } else if(playerPointValue === opponentPointValue) {
                 self.zoneText.setText("Draw: Both Pieces Destroyed")
+            }
+        })
+
+        socket.on('newRound', function(turnData) {
+            self.playerDropZone.setInteractive()
+
+            let playerPointValue = pieceValues[turnData[socket.id]]
+            let opponentPointValue = pieceValues[turnData[self.opponentId]]
+            console.log('playerPointValue: ' + playerPointValue)
+            console.log('opponentPointValue: ' + opponentPointValue)
+            console.log(self.opponentZoneCard)
+
+            self.zoneText.setText("")
+            if(playerPointValue > opponentPointValue) {
+                self.playerZoneCard.setInteractive()
+                self.playerZoneCard.x = self.playerZoneCard.data['originX']
+                self.playerZoneCard.y = self.playerZoneCard.data['originY']
+                self.opponentZoneCard.data = null
+                self.opponentZoneCard.destroy()
+            } else if(playerPointValue < opponentPointValue) {
+                self.playerZoneCard.data = null
+                self.playerZoneCard.destroy()
+                self.opponentZoneCard.setTexture('CardTemplateBack')
+                self.opponentZoneCard.x = self.opponentZoneCard.data['originX']
+                self.opponentZoneCard.y = self.opponentZoneCard.data['originY']
+                self.opponentCards.unshift(self.opponentZoneCard)
+            } else if(playerPointValue === opponentPointValue) {
+                self.playerZoneCard.data = null
+                self.playerZoneCard.destroy()
+                self.opponentZoneCard.data = null
+                self.opponentZoneCard.destroy()
             }
         })
 
@@ -150,16 +176,13 @@ export default class Game extends Phaser.Scene {
         })
 
         this.input.on('drop', function(pointer, gameObject, dropZone) {
-            if(!dropZone.data.values.isOccupied) {
-                dropZone.data.values.isOccupied = true
-                dropZone.disableInteractive()
-                dropZone.data.values.cards++
-                gameObject.x = dropZone.x
-                gameObject.y = dropZone.y
-                gameObject.disableInteractive()
-                self.playerZoneCard = gameObject
-                socket.emit('cardPlayed', gameObject.texture.key, socket.id, self.isPlayerA)
-            }
+            dropZone.disableInteractive()
+            dropZone.data.values.cards++
+            gameObject.x = dropZone.x
+            gameObject.y = dropZone.y
+            gameObject.disableInteractive()
+            self.playerZoneCard = gameObject
+            socket.emit('cardPlayed', gameObject.texture.key, socket.id, self.isPlayerA)
         })
     }
 
