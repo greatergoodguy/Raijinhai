@@ -3,6 +3,16 @@ import Zone from '../helpers/zone'
 import Dealer from '../helpers/dealer'
 import io from 'socket.io-client'
 
+const pieceValues = {
+    'Card05Queen': 0,
+    'Card01Soldier': 1,
+    'Card02Calvary': 2,
+    'Card03Elephant': 3,
+    'Card04Shogun': 4,
+    'Card06King': 5,
+    'Card07Indra': 6,
+}
+
 export default class Game extends Phaser.Scene {
     constructor() {
         super({
@@ -42,45 +52,83 @@ export default class Game extends Phaser.Scene {
         
         this.dealer = new Dealer(this)
 
-        this.socket = io('http://localhost:3000')
-        this.socket.on('connect', function() {
-            console.log('Connected!')
+        let socket = io('http://localhost:3000')
+        socket.on('connect', function() {
+            console.log('Connected!' + socket.id)
         })
 
-        this.socket.on('isPlayerA', function() {
-            self.isPlayerA = true
-        })
+        let playerText = this.add.text(75, 520, ['']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF').setInteractive()
+        this.gameStart = this.add.text(75, 350, ['GAME START']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF').setInteractive()
+        this.zoneText = this.add.text(700, 375, ['']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF').setInteractive()
+        this.add.text(350, 520, ['Your Zone']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF')
+        this.add.text(1050, 520, ['Opponent Zone']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF')
 
-        this.socket.on('dealCards', function() {
+        socket.on('dealCards', function(gameData, invertedGameData) {
+            console.log(gameData)
+
+            if(gameData[socket.id] === 1) {
+                self.isPlayerA = true
+                playerText.setText('Player 1')
+                self.opponentId = invertedGameData[2]
+            } else if(gameData[socket.id] === 2) {
+                self.isPlayerA = false
+                playerText.setText('Player 2')
+                self.opponentId = invertedGameData[1]
+            } else {
+                console.log("Something went wrong")
+            }
+
             self.dealer.dealCards()
-            self.dealText.disableInteractive()
+            self.gameStart.disableInteractive()
+            self.gameStart.visible = false
         })
 
-        this.socket.on('cardPlayed', function(gameObject, isPlayerA) {
+        socket.on('cardPlayed', function(textureKey, socketId) {
             console.log('socket.on(cardPlayed)')
-            if(isPlayerA !== self.isPlayerA) {
-                let sprite = gameObject.textureKey
-                console.log(sprite)
-                self.opponentCards.shift().destroy()
-                self.playerDropZone.data.values.cards++
+            if(socketId !== socket.id) {
+                let sprite = 'CardTemplateBack'
+                var removedCard = self.opponentCards.shift()
+                removedCard.data = null
+                console.log(removedCard)
+                removedCard.destroy()
                 let card = new Card(self, self.opponentDropZone.x, self.opponentDropZone.y)
-                card.render(sprite).disableInteractive()
+                self.opponentZoneCard = card.render(sprite).disableInteractive()
             }
 
         })
 
-        this.dealText = this.add.text(75, 350, ['DEAL CARDS']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF').setInteractive()
+        socket.on('turnFinished', function(turnData) {
+            console.log(turnData)
+            let playerPointValue = pieceValues[turnData[socket.id]]
+            let opponentPointValue = pieceValues[turnData[self.opponentId]]
+            console.log('playerPointValue: ' + playerPointValue)
+            console.log('opponentPointValue: ' + opponentPointValue)
 
-        this.dealText.on('pointerdown', function () {
-            self.socket.emit('dealCards')
+            if(playerPointValue > opponentPointValue) {
+                self.zoneText.setText("You Win")
+                setTimeout(function() { 
+                    self.playerZoneCard.x = self.playerZoneCard.data['originX']
+                    self.playerZoneCard.y = self.playerZoneCard.data['originY']
+                    self.opponentZoneCard.data = null
+                    self.opponentZoneCard.destroy()
+                 }, 1000);
+            } else if(playerPointValue < opponentPointValue) {
+                self.zoneText.setText("You Lose")
+            } else if(playerPointValue === opponentPointValue) {
+                self.zoneText.setText("Draw: Both Pieces Destroyed")
+            }
         })
 
-        this.dealText.on('pointerover', function () {
-            self.dealText.setColor('#ff69b4')
+        this.gameStart.on('pointerdown', function () {
+            socket.emit('dealCards')
         })
 
-        this.dealText.on('pointerout', function () {
-            self.dealText.setColor('#00FFFF')
+        this.gameStart.on('pointerover', function () {
+            self.gameStart.setColor('#ff69b4')
+        })
+
+        this.gameStart.on('pointerout', function () {
+            self.gameStart.setColor('#00FFFF')
         })
 
         this.input.on('dragstart', function(pointer, gameObject) {
@@ -109,7 +157,8 @@ export default class Game extends Phaser.Scene {
                 gameObject.x = dropZone.x
                 gameObject.y = dropZone.y
                 gameObject.disableInteractive()
-                self.socket.emit('cardPlayed', gameObject, self.isPlayerA)
+                self.playerZoneCard = gameObject
+                socket.emit('cardPlayed', gameObject.texture.key, socket.id, self.isPlayerA)
             }
         })
     }
