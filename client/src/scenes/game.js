@@ -96,52 +96,34 @@ export default class Game extends Phaser.Scene {
 
         })
 
-        socket.on('turnFinished', function(turnData) {
+        socket.on('turnFinished', function(roundData) {
             self.opponentZoneCard.setTexture(self.opponentZoneCard.data['textureKey'])
-            console.log(turnData)
-            let playerPointValue = pieceValues[turnData[socket.id]]
-            let opponentPointValue = pieceValues[turnData[self.opponentId]]
-            console.log('playerPointValue: ' + playerPointValue)
-            console.log('opponentPointValue: ' + opponentPointValue)
-            console.log(self.opponentZoneCard)
-
-            if(playerPointValue > opponentPointValue) {
-                self.zoneText.setText("You Win")
-            } else if(playerPointValue < opponentPointValue) {
-                self.zoneText.setText("You Lose")
-            } else if(playerPointValue === opponentPointValue) {
-                self.zoneText.setText("Draw: Both Pieces Destroyed")
-            }
+            self.zoneText.setText(roundData[socket.id]['zoneText'])
+            console.log(roundData)
         })
 
-        socket.on('newRound', function(turnData) {
+        socket.on('newRound', function(roundData) {
             self.playerDropZone.setInteractive()
 
-            let playerPointValue = pieceValues[turnData[socket.id]]
-            let opponentPointValue = pieceValues[turnData[self.opponentId]]
-            console.log('playerPointValue: ' + playerPointValue)
-            console.log('opponentPointValue: ' + opponentPointValue)
-            console.log(self.opponentZoneCard)
-
             self.zoneText.setText("")
-            if(playerPointValue > opponentPointValue) {
+
+            if(roundData[socket.id]['destroyPiece']) {
+                self.playerZoneCard.data = null
+                self.playerZoneCard.destroy()
+            } else {
                 self.playerZoneCard.setInteractive()
                 self.playerZoneCard.x = self.playerZoneCard.data['originX']
                 self.playerZoneCard.y = self.playerZoneCard.data['originY']
+            }
+
+            if(roundData[self.opponentId]['destroyPiece']) {
                 self.opponentZoneCard.data = null
                 self.opponentZoneCard.destroy()
-            } else if(playerPointValue < opponentPointValue) {
-                self.playerZoneCard.data = null
-                self.playerZoneCard.destroy()
+            } else {
                 self.opponentZoneCard.setTexture('CardTemplateBack')
                 self.opponentZoneCard.x = self.opponentZoneCard.data['originX']
                 self.opponentZoneCard.y = self.opponentZoneCard.data['originY']
                 self.opponentCards.unshift(self.opponentZoneCard)
-            } else if(playerPointValue === opponentPointValue) {
-                self.playerZoneCard.data = null
-                self.playerZoneCard.destroy()
-                self.opponentZoneCard.data = null
-                self.opponentZoneCard.destroy()
             }
         })
 

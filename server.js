@@ -32,11 +32,6 @@ io.on('connection', function(socket) {
 
         if(Object.keys(turnData).length === 2) {
             roundFinished(turnData)
-            // io.emit('turnFinished', turnData)
-            // setTimeout(function() { 
-            //     io.emit('newRound', turnData)
-            //     turnData = {}
-            // }, 4000);
         }
     })
 
@@ -52,26 +47,53 @@ http.listen(3000, function() {
 
 function roundFinished() {
     console.log('roundFinished')
-    io.emit('turnFinished', turnData)
+
+    var player1PointValue = pieceValues[turnData[players[0]]]
+    var player2PointValue = pieceValues[turnData[players[1]]]
+
+    var roundData = {}
+    roundData[players[0]] = {}
+    roundData[players[1]] = {}
+    if(player1PointValue > player2PointValue) {
+        roundData[players[0]]['roundWinner'] = true
+        roundData[players[1]]['roundWinner'] = false
+        roundData[players[0]]['zoneText'] = "You Win"
+        roundData[players[1]]['zoneText'] = "You Lose"
+        roundData[players[0]]['isDraw'] = false
+        roundData[players[1]]['isDraw'] = false
+        roundData[players[0]]['destroyPiece'] = false
+        roundData[players[1]]['destroyPiece'] = true
+    } else if(player1PointValue < player2PointValue) {
+        roundData[players[0]]['roundWinner'] = false
+        roundData[players[1]]['roundWinner'] = true
+        roundData[players[0]]['zoneText'] = "You Lose"
+        roundData[players[1]]['zoneText'] = "You Win"
+        roundData[players[0]]['isDraw'] = false
+        roundData[players[1]]['isDraw'] = false
+        roundData[players[0]]['destroyPiece'] = true
+        roundData[players[1]]['destroyPiece'] = false
+    } else if(player1PointValue === player2PointValue) {
+        roundData[players[0]]['roundWinner'] = false
+        roundData[players[1]]['roundWinner'] = false
+        roundData[players[0]]['zoneText'] = "Draw: Both Pieces Destroyed"
+        roundData[players[1]]['zoneText'] = "Draw: Both Pieces Destroyed"
+        roundData[players[0]]['isDraw'] = true
+        roundData[players[1]]['isDraw'] = true
+        roundData[players[0]]['destroyPiece'] = true
+        roundData[players[1]]['destroyPiece'] = true
+    }
+
+    if(turnData[players[0]] === 'Card07Indra') {
+        roundData[players[0]]['destroyPiece'] = true
+    } else if(turnData[players[1]] === 'Card07Indra') {
+        roundData[players[1]]['destroyPiece'] = true
+    } 
+
+    io.emit('turnFinished', roundData)
     setTimeout(function() { 
-        io.emit('newRound', turnData)
+        io.emit('newRound', roundData)
         turnData = {}
     }, 4000);
-
-    // let playerPointValue = pieceValues[turnData[socket.id]]
-    // let opponentPointValue = pieceValues[turnData[self.opponentId]]
-    // console.log('playerPointValue: ' + playerPointValue)
-    // console.log('opponentPointValue: ' + opponentPointValue)
-    // console.log(self.opponentZoneCard)
-
-    // if(playerPointValue > opponentPointValue) {
-    //     self.zoneText.setText("You Win")
-    // } else if(playerPointValue < opponentPointValue) {
-    //     self.zoneText.setText("You Lose")
-    // } else if(playerPointValue === opponentPointValue) {
-    //     self.zoneText.setText("Draw: Both Pieces Destroyed")
-    // }
-
 }
 
 function createGameData(players) {
