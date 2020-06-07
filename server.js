@@ -26,7 +26,7 @@ io.on('connection', function(socket) {
     })
 
     socket.on('cardPlayed', function(textureKey, socketId) {
-        io.emit('cardPlayed', textureKey, socketId)
+        io.emit('cardPlayed', socketId)
         turnData[socketId] = textureKey
         console.log()
 
@@ -54,33 +54,37 @@ function roundFinished() {
     var roundData = {}
     roundData[players[0]] = {}
     roundData[players[1]] = {}
+    roundData[players[0]]['piece'] = turnData[players[0]]
+    roundData[players[0]]['opponentPiece'] = turnData[players[1]]
+    roundData[players[1]]['piece'] = turnData[players[1]]
+    roundData[players[1]]['opponentPiece'] = turnData[players[0]]
     if(player1PointValue > player2PointValue) {
         roundData[players[0]]['roundWinner'] = true
         roundData[players[1]]['roundWinner'] = false
         roundData[players[0]]['zoneText'] = "You Win"
         roundData[players[1]]['zoneText'] = "You Lose"
-        roundData[players[0]]['isDraw'] = false
-        roundData[players[1]]['isDraw'] = false
         roundData[players[0]]['destroyPiece'] = false
         roundData[players[1]]['destroyPiece'] = true
+        roundData['isDraw'] = false
+        roundData['isGameOver'] = false
     } else if(player1PointValue < player2PointValue) {
         roundData[players[0]]['roundWinner'] = false
         roundData[players[1]]['roundWinner'] = true
         roundData[players[0]]['zoneText'] = "You Lose"
         roundData[players[1]]['zoneText'] = "You Win"
-        roundData[players[0]]['isDraw'] = false
-        roundData[players[1]]['isDraw'] = false
         roundData[players[0]]['destroyPiece'] = true
         roundData[players[1]]['destroyPiece'] = false
+        roundData['isDraw'] = false
+        roundData['isGameOver'] = false
     } else if(player1PointValue === player2PointValue) {
         roundData[players[0]]['roundWinner'] = false
         roundData[players[1]]['roundWinner'] = false
         roundData[players[0]]['zoneText'] = "Draw: Both Pieces Destroyed"
         roundData[players[1]]['zoneText'] = "Draw: Both Pieces Destroyed"
-        roundData[players[0]]['isDraw'] = true
-        roundData[players[1]]['isDraw'] = true
         roundData[players[0]]['destroyPiece'] = true
         roundData[players[1]]['destroyPiece'] = true
+        roundData['isDraw'] = true
+        roundData['isGameOver'] = false
     }
 
     if(turnData[players[0]] === 'Card07Indra') {
@@ -89,11 +93,53 @@ function roundFinished() {
         roundData[players[1]]['destroyPiece'] = true
     } 
 
+    if(turnData[players[0]] === 'Card07Indra' && turnData[players[1]] === 'Card06King') {
+        roundData[players[0]]['roundWinner'] = true
+        roundData[players[1]]['roundWinner'] = false
+        roundData[players[0]]['zoneText'] = "You Win The Game"
+        roundData[players[1]]['zoneText'] = "You Lose The Game"
+        roundData[players[0]]['destroyPiece'] = false
+        roundData[players[1]]['destroyPiece'] = true
+        roundData['isDraw'] = false
+        roundData['isGameOver'] = true
+    } else if(turnData[players[0]] === 'Card06King' && turnData[players[1]] === 'Card07Indra') {
+        roundData[players[0]]['roundWinner'] = false
+        roundData[players[1]]['roundWinner'] = true
+        roundData[players[0]]['zoneText'] = "You Lose The Game"
+        roundData[players[1]]['zoneText'] = "You Win The Game"
+        roundData[players[0]]['destroyPiece'] = true
+        roundData[players[1]]['destroyPiece'] = false
+        roundData['isDraw'] = false
+        roundData['isGameOver'] = true
+    }
+
+    if(turnData[players[0]] === 'Card05Queen' && turnData[players[1]] === 'Card06King') {
+        roundData[players[0]]['roundWinner'] = true
+        roundData[players[1]]['roundWinner'] = false
+        roundData[players[0]]['zoneText'] = "You Win The Game"
+        roundData[players[1]]['zoneText'] = "You Lose The Game"
+        roundData[players[0]]['destroyPiece'] = false
+        roundData[players[1]]['destroyPiece'] = true
+        roundData['isDraw'] = false
+        roundData['isGameOver'] = true
+    } else if(turnData[players[0]] === 'Card06King' && turnData[players[1]] === 'Card05Queen') {
+        roundData[players[0]]['roundWinner'] = false
+        roundData[players[1]]['roundWinner'] = true
+        roundData[players[0]]['zoneText'] = "You Lose The Game"
+        roundData[players[1]]['zoneText'] = "You Win The Game"
+        roundData[players[0]]['destroyPiece'] = true
+        roundData[players[1]]['destroyPiece'] = false
+        roundData['isDraw'] = false
+        roundData['isGameOver'] = true
+    }
+
     io.emit('turnFinished', roundData)
-    setTimeout(function() { 
-        io.emit('newRound', roundData)
-        turnData = {}
-    }, 4000);
+    if(!roundData['isGameOver']) {
+        setTimeout(function() { 
+            io.emit('newRound', roundData)
+            turnData = {}
+        }, 4000);
+    }
 }
 
 function createGameData(players) {

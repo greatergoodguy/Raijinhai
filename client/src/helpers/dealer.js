@@ -3,9 +3,6 @@ import Card from './card'
 export default class Dealer {
     constructor(scene) {
         this.dealCards = () => {
-            let playerSprite;
-            let opponentSprite;
-
             let xOffset = 80
 
             if(scene.isPlayerA) {

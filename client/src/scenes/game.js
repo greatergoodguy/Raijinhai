@@ -83,26 +83,26 @@ export default class Game extends Phaser.Scene {
             self.gameStart.visible = false
         })
 
-        socket.on('cardPlayed', function(textureKey, socketId) {
+        socket.on('cardPlayed', function(socketId) {
             console.log('socket.on(cardPlayed)')
             if(socketId !== socket.id) {
                 var playedCard = self.opponentCards.shift()
                 console.log(self.opponentCards)
                 playedCard.x = self.opponentDropZone.x;
                 playedCard.y = self.opponentDropZone.y
-                playedCard.data['textureKey'] = textureKey
                 self.opponentZoneCard = playedCard
             }
 
         })
 
         socket.on('turnFinished', function(roundData) {
-            self.opponentZoneCard.setTexture(self.opponentZoneCard.data['textureKey'])
-            self.zoneText.setText(roundData[socket.id]['zoneText'])
             console.log(roundData)
+            self.opponentZoneCard.setTexture(roundData[socket.id]['opponentPiece'])
+            self.zoneText.setText(roundData[socket.id]['zoneText'])
         })
 
         socket.on('newRound', function(roundData) {
+            console.log(roundData)
             self.playerDropZone.setInteractive()
 
             self.zoneText.setText("")
@@ -164,7 +164,7 @@ export default class Game extends Phaser.Scene {
             gameObject.y = dropZone.y
             gameObject.disableInteractive()
             self.playerZoneCard = gameObject
-            socket.emit('cardPlayed', gameObject.texture.key, socket.id, self.isPlayerA)
+            socket.emit('cardPlayed', gameObject.texture.key, socket.id)
         })
     }
 
