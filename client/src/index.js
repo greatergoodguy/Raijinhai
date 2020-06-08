@@ -1,14 +1,12 @@
-import Phaser from "phaser"
-import Game from "./scenes/game"
+import Phaser from 'phaser'
+import config from './config/config'
 
-const config = {
-  type: Phaser.AUTO,
-  parent: "phaser-example",
-  width: 1340,
-  height: 780,
-  scene: [
-    Game
-  ]
+class Raijinhai extends Phaser.Game {
+  constructor () {
+    super(config);
+
+    this.scene.start('Title');
+  }
 }
 
-const game = new Phaser.Game(config)
+window.game = new Raijinhai(config)
