@@ -52,7 +52,8 @@ export default class Game extends Phaser.Scene {
         
         this.dealer = new Dealer(this)
 
-        let socket = io('http://localhost:3000')
+        //let socket = io('http://localhost:3000')
+        let socket = io('https://raijinhai-server.herokuapp.com')
         socket.on('connect', function() {
             console.log('Connected!' + socket.id)
         })
