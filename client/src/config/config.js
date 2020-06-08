@@ -1,5 +1,7 @@
-import Title from "../scenes/title"
-import Game from "../scenes/game"
+import TitleScene from "../scenes/TitleScene"
+import HowToPlayScene from "../scenes/HowToPlayScene"
+import CreditsScene from "../scenes/CreditsScene"
+import GameScene from "../scenes/GameScene"
 
 export default {
     type: Phaser.AUTO,
@@ -7,7 +9,9 @@ export default {
     width: 1340,
     height: 780,
     scene: [
-        Title,
-        Game
+        TitleScene,
+        HowToPlayScene,
+        CreditsScene,
+        GameScene
     ]
 }
