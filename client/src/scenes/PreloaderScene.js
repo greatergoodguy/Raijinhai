@@ -1,3 +1,4 @@
+import { FADE_DURATION }  from '../config/const'
 import config from '../config/config'
 
 export default class PreloaderScene extends Phaser.Scene {
@@ -15,7 +16,10 @@ export default class PreloaderScene extends Phaser.Scene {
             loadingText.setText("Loading... " + Math.round(progress*100) + "%")
         })
         this.load.on('complete', function() {
-            self.scene.start("Title")
+            self.cameras.main.fadeOut(FADE_DURATION)
+            self.cameras.main.once('camerafadeoutcomplete', function (camera) {
+                self.scene.start('Title')
+            })
         })
     }
 
@@ -24,6 +28,7 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.image('TitleImage', 'src/assets/TitleImage.png');
         this.load.image('blueButton1', 'src/assets/ui/blue_button02.png');
         this.load.image('blueButton2', 'src/assets/ui/blue_button03.png');
+        this.load.image('InvisiblePixel', 'src/assets/ui/InvisiblePixel.png');
 
         this.load.image('cyanCardFront', 'src/assets/CyanCardFront.png')
         this.load.image('cyanCardBack', 'src/assets/CyanCardBack.png')
