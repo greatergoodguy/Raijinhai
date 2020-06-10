@@ -18,7 +18,11 @@ export default class TitleScene extends Phaser.Scene {
         titleImage.setOrigin(0, 0)
 
         this.button1 = new Button(this, 50, 250, 'blueButton1', 'blueButton2', 'Start Game', function() {
-            console.log('Start Game')
+            self.cameras.main.fadeOut(FADE_DURATION)
+            invisiblePixel.setInteractive()
+            self.cameras.main.once('camerafadeoutcomplete', function (camera) {
+                self.scene.start('Lobby')
+            })
         });
 
         this.button2 = new Button(this, 50, 350, 'blueButton1', 'blueButton2', 'How To Play', function() {
@@ -36,7 +40,7 @@ export default class TitleScene extends Phaser.Scene {
             })
         });
 
-        this.titleBitmapText = this.add.bitmapText(config.width/2, 50, 'khodijah', 'Raijinhai', 128);
+        this.titleBitmapText = this.add.bitmapText(config.width/2, 50, 'khodijah', 'Raijinhai', 128)
         this.titleBitmapText.setOrigin(0.5, 0)
 
         let invisiblePixel = this.add.image(0, 0, 'InvisiblePixel').setScale(config.width, config.height)

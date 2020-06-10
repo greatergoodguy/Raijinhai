@@ -2,10 +2,10 @@ import { FADE_DURATION }  from '../config/const'
 import config from '../config/config'
 import Button from '../helpers/button';
 
-export default class HowToPlayScene extends Phaser.Scene {
+export default class LobbyScene extends Phaser.Scene {
     constructor() {
         super({
-            key: 'How To Play' 
+            key: 'Lobby' 
         })
     }
 
@@ -17,7 +17,7 @@ export default class HowToPlayScene extends Phaser.Scene {
         let titleImage = this.add.image(0, 0, 'TitleImage');
         titleImage.setOrigin(0, 0)
 
-        this.button1 = new Button(this, 50, 350, 'blueButton1', 'blueButton2', 'Back', function() {
+        this.button1 = new Button(this, 50, 250, 'blueButton1', 'blueButton2', 'Back', function() {
             self.cameras.main.fadeOut(FADE_DURATION)
             invisiblePixel.setInteractive()
             self.cameras.main.once('camerafadeoutcomplete', function (camera) {
@@ -25,7 +25,7 @@ export default class HowToPlayScene extends Phaser.Scene {
             })
         })
 
-        this.titleBitmapText = this.add.bitmapText(config.width/2, 50, 'khodijah', 'How To Play', 128)
+        this.titleBitmapText = this.add.bitmapText(config.width/2, 50, 'khodijah', 'Lobby', 128)
         this.titleBitmapText.setOrigin(0.5, 0)
 
         let invisiblePixel = this.add.image(0, 0, 'InvisiblePixel').setScale(config.width, config.height)

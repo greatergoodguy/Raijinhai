@@ -9,11 +9,7 @@ export default class CreditsScene extends Phaser.Scene {
         })
     }
 
-    preload() {
-        this.load.image('TitleImage', 'src/assets/TitleImage.png');
-        this.load.image('blueButton1', 'src/assets/ui/blue_button02.png');
-        this.load.image('blueButton2', 'src/assets/ui/blue_button03.png');
-    }
+    preload() {}
 
     create() {
         let self = this
@@ -28,6 +24,9 @@ export default class CreditsScene extends Phaser.Scene {
                 self.scene.start('Title')
             })
         })
+
+        this.titleBitmapText = this.add.bitmapText(config.width/2, 50, 'khodijah', 'Credits', 128)
+        this.titleBitmapText.setOrigin(0.5, 0)
 
         let invisiblePixel = this.add.image(0, 0, 'InvisiblePixel').setScale(config.width, config.height)
         invisiblePixel.setOrigin(0, 0)
