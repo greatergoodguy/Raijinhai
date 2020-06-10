@@ -8,34 +8,30 @@ export default class TitleScene extends Phaser.Scene {
         })
     }
 
-    preload() {
-        console.log("TitleScene")
-        this.load.image('TitleImage', 'src/assets/TitleImage.png')
-        this.load.image('blueButton1', 'src/assets/ui/blue_button02.png')
-        this.load.image('blueButton2', 'src/assets/ui/blue_button03.png')
-    }
+    preload() {}
 
     create() {
         let self = this
+
         let titleImage = this.add.image(0, 0, 'TitleImage')
         titleImage.setOrigin(0, 0)
 
-        this.button1 = new Button(this, 230, 200, 'blueButton1', 'blueButton2', 'Start Game', function() {
+        this.button1 = new Button(this, 50, 250, 'blueButton1', 'blueButton2', 'Start Game', function() {
             console.log('Start Game')
         });
-        this.button2 = new Button(this, 230, 300, 'blueButton1', 'blueButton2', 'How To Play', function() {
+
+        this.button2 = new Button(this, 50, 350, 'blueButton1', 'blueButton2', 'How To Play', function() {
             //self.cameras.main.fadeOut(5000)
             self.scene.start('How To Play')
         });
-        this.button3 = new Button(this, 230, 400, 'blueButton1', 'blueButton2', 'Credits', function() {
+        this.button3 = new Button(this, 50, 450, 'blueButton1', 'blueButton2', 'Credits', function() {
             //self.cameras.main.fadeIn(1000);
             self.scene.start('Credits')
         });
 
-        this.titleText = this.add.text(670, 70, ['Raijinhai']).setFontSize(72).setFontFamily('Trebuchet MS').setColor('#00FFFF').setInteractive()
-        this.titleText.setOrigin(0.5, 0)
+        this.titleBitmapText = this.add.bitmapText(config.width/2, 50, 'khodijah', 'Raijinhai', 128);
+        this.titleBitmapText.setOrigin(0.5, 0)
     }
 
-    update() {
-    }
+    update() {}
 }

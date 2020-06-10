@@ -5,7 +5,7 @@ class Raijinhai extends Phaser.Game {
   constructor () {
     super(config);
 
-    this.scene.start('Title');
+    this.scene.start('Preloader');
   }
 }
 

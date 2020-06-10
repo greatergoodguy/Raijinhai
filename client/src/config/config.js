@@ -1,3 +1,4 @@
+import PreloaderScene from "../scenes/PreloaderScene"
 import TitleScene from "../scenes/TitleScene"
 import HowToPlayScene from "../scenes/HowToPlayScene"
 import CreditsScene from "../scenes/CreditsScene"
@@ -9,6 +10,7 @@ export default {
     width: 1340,
     height: 780,
     scene: [
+        PreloaderScene,
         TitleScene,
         HowToPlayScene,
         CreditsScene,

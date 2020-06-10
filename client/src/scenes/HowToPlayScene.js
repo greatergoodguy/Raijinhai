@@ -20,7 +20,7 @@ export default class HowToPlayScene extends Phaser.Scene {
         let titleImage = this.add.image(0, 0, 'TitleImage');
         titleImage.setOrigin(0, 0)
 
-        this.button1 = new Button(this, 230, 300, 'blueButton1', 'blueButton2', 'Back', function() {
+        this.button1 = new Button(this, 50, 350, 'blueButton1', 'blueButton2', 'Back', function() {
             self.scene.start('Title')
         });
     }
