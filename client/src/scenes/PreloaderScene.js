@@ -10,7 +10,7 @@ export default class PreloaderScene extends Phaser.Scene {
 
     displayLoader() {
         let self = this
-        let loadingText = this.add.text(config.width/2, config.height/2, "Loading... ").setFontSize(72)
+        let loadingText = this.add.text(config.width/2, config.height/2, "Loading... 0%").setFontSize(72)
         loadingText.setOrigin(0.5, 0.5)    
         this.load.on('progress', function(progress) {
             loadingText.setText("Loading... " + Math.round(progress*100) + "%")
@@ -45,6 +45,10 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.image('CardTemplateBack', 'src/assets/CardTemplateBack.png')
 
         this.load.bitmapFont('khodijah', 'src/assets/fonts/khodijah.png', 'src/assets/fonts/khodijah.fnt')
+
+        this.load.audio("click", "src/assets/sounds/click.ogg")
+
+        
     }
 
     create() {}

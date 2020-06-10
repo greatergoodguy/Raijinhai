@@ -14,10 +14,13 @@ export default class TitleScene extends Phaser.Scene {
     create() {
         let self = this
 
+        var clickSound = this.sound.add('click')
+
         let titleImage = this.add.image(0, 0, 'TitleImage')
         titleImage.setOrigin(0, 0)
 
         this.button1 = new Button(this, 50, 250, 'blueButton1', 'blueButton2', 'Start Game', function() {
+            clickSound.play()
             self.cameras.main.fadeOut(FADE_DURATION)
             invisiblePixel.setInteractive()
             self.cameras.main.once('camerafadeoutcomplete', function (camera) {
@@ -26,6 +29,7 @@ export default class TitleScene extends Phaser.Scene {
         });
 
         this.button2 = new Button(this, 50, 350, 'blueButton1', 'blueButton2', 'How To Play', function() {
+            clickSound.play()
             self.cameras.main.fadeOut(FADE_DURATION)
             invisiblePixel.setInteractive()
             self.cameras.main.once('camerafadeoutcomplete', function (camera) {
@@ -33,6 +37,7 @@ export default class TitleScene extends Phaser.Scene {
             })
         });
         this.button3 = new Button(this, 50, 450, 'blueButton1', 'blueButton2', 'Credits', function() {
+            clickSound.play()
             self.cameras.main.fadeOut(FADE_DURATION)
             invisiblePixel.setInteractive()
             self.cameras.main.once('camerafadeoutcomplete', function (camera) {
