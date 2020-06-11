@@ -19,7 +19,7 @@ export default class CreditsScene extends Phaser.Scene {
         let titleImage = this.add.image(0, 0, 'TitleImage');
         titleImage.setOrigin(0, 0)
 
-        this.button1 = new Button(this, 50, 450, 'Back', function() {
+        this.button1 = new Button(this, 50, 500, 'Back', function() {
             clickSound.play()
             self.cameras.main.fadeOut(FADE_DURATION)
             invisiblePixel.setInteractive()

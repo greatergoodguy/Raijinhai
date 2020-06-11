@@ -1,12 +1,12 @@
 import 'phaser';
 
-export default class Button extends Phaser.GameObjects.Container {
+export default class LobbyButton extends Phaser.GameObjects.Container {
   constructor(scene, x, y, text, onButtonClick) {
     super(scene)
     this.scene = scene
     this.onButtonClick = onButtonClick
 
-    this.xScale = 1.6
+    this.xScale = 4.0
 
     this.button = this.scene.add.sprite(0, 0, 'blueButton2').setScale(this.xScale, 1.1).setInteractive()
     this.text = this.scene.add.text(0, 0, text, { fontSize: '32px', fill: '#fff' })
