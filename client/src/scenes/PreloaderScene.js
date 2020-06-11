@@ -25,10 +25,14 @@ export default class PreloaderScene extends Phaser.Scene {
 
     preload() {
         this.displayLoader()
-        this.load.image('TitleImage', 'src/assets/TitleImage.png');
-        this.load.image('blueButton1', 'src/assets/ui/blue_button02.png');
-        this.load.image('blueButton2', 'src/assets/ui/blue_button03.png');
-        this.load.image('InvisiblePixel', 'src/assets/ui/InvisiblePixel.png');
+        this.load.image('TitleImage', 'src/assets/TitleImage.png')
+        this.load.image('blueButton0', 'src/assets/ui/blue_button00.png')
+        this.load.image('blueButton1', 'src/assets/ui/blue_button01.png')
+        this.load.image('blueButton2', 'src/assets/ui/blue_button02.png')
+        this.load.image('blueButton3', 'src/assets/ui/blue_button03.png')
+        this.load.image('blueButton4', 'src/assets/ui/blue_button04.png')
+        this.load.image('blueButton5', 'src/assets/ui/blue_button05.png')
+        this.load.image('InvisiblePixel', 'src/assets/ui/InvisiblePixel.png')
 
         this.load.image('cyanCardFront', 'src/assets/CyanCardFront.png')
         this.load.image('cyanCardBack', 'src/assets/CyanCardBack.png')
