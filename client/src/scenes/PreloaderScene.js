@@ -1,5 +1,6 @@
 import { FADE_DURATION }  from '../config/const'
 import config from '../config/config'
+import io from 'socket.io-client'
 
 export default class PreloaderScene extends Phaser.Scene {
     constructor() {
@@ -52,6 +53,8 @@ export default class PreloaderScene extends Phaser.Scene {
 
         this.load.audio("click", "src/assets/sounds/click.ogg")
 
+        this.game.socket = io('http://localhost:3000')
+        //this.game.socket = io('https://raijinhai-server.herokuapp.com')
         
     }
 

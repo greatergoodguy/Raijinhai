@@ -1,6 +1,8 @@
 const server = require('express')()
 const http = require('http').createServer(server)
-const io = require('socket.io')(http)
+io = require('socket.io')(http)
+
+var Lobby = require('./lobby')
 let players = []
 let turnData = {}
 
@@ -14,6 +16,9 @@ const pieceValues = {
     'Card06King': 5,
     'Card07Indra': 6,
 }
+
+Lobby.initialize()
+
 
 io.on('connection', function(socket) {
     console.log('A user connected: ' + socket.id)
@@ -35,16 +40,64 @@ io.on('connection', function(socket) {
         }
     })
 
-    socket.on('disconnect', function() {
-        console.log('A user disconnected: ' + socket.id)
-        players = players.filter(player => player !== socket.id)
-    })
+    socket.on('disconnect', onClientDisconnect)
+
+    // socket.on('disconnect', function() {
+    //     console.log('A user disconnected: ' + socket.id)
+    //     players = players.filter(player => player !== socket.id)
+    // })
+
+    socket.on('enter lobby', Lobby.onEnterLobby)
+    socket.on('enter pending game', Lobby.onEnterPendingGame)
+    socket.on('leave pending game', Lobby.onLeavePendingGame)
 })
 
 //http.listen(3000, function() {
 http.listen(process.env.PORT || 3000, function() {
     console.log('Server started')
 })
+
+function onClientDisconnect() {
+    
+    console.log('A user disconnected: ' + this.id)
+    players = players.filter(player => player !== this.id)
+    console.log(this.gameId)
+	if (this.gameId == null) {
+		return;
+	}
+
+	var lobbySlots = Lobby.getLobbySlots();
+
+    console.log(lobbySlots[this.gameId])
+
+	if (lobbySlots[this.gameId].state == "joinable" || lobbySlots[this.gameId].state == "full") {
+		Lobby.onLeavePendingGame.call(this);
+	} else if (lobbySlots[this.gameId].state == "settingup") {
+		lobbySlots[this.gameId].state = "empty";
+
+		Lobby.broadcastSlotStateUpdate(this.gameId, "empty");
+	} else if(lobbySlots[this.gameId].state == "inprogress") {
+		var game = games[this.gameId];
+	
+		if(this.id in game.players) {
+			console.log("deleting " + this.id);
+			delete game.players[this.id];
+	
+			io.in(this.gameId).emit("remove player", {id: this.id});	
+		}
+
+		if(game.numPlayers < 2) {
+			if(game.numPlayers == 1) {
+				io.in(this.gameId).emit("no opponents left");
+			}
+			terminateExistingGame(this.gameId);
+		}
+
+		if(game.awaitingAcknowledgements && game.numEndOfRoundAcknowledgements >= game.numPlayers) {
+			game.awaitingAcknowledgements = false;
+		}
+	}
+}
 
 function roundFinished() {
     console.log('roundFinished')

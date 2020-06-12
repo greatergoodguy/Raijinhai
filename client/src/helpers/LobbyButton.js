@@ -1,10 +1,11 @@
 import 'phaser';
 
 export default class LobbyButton extends Phaser.GameObjects.Container {
-  constructor(scene, x, y, text, onButtonClick) {
+  constructor(scene, x, y, text, gameData, onButtonClick) {
     super(scene)
     this.scene = scene
     this.onButtonClick = onButtonClick
+    this.gameData = gameData
 
     this.xScale = 4.0
 
