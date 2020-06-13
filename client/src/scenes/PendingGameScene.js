@@ -17,6 +17,7 @@ export default class PendingGameScene extends Phaser.Scene {
     preload() {}
 
     create() {
+        console.log('PendingGameScene.create()')
         let self = this
         let socket = this.game.socket
         let title = 'Room ' + this.gameData.roomNumber

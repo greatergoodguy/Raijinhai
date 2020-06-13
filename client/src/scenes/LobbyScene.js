@@ -39,6 +39,7 @@ export default class LobbyScene extends Phaser.Scene {
         this.invisiblePixel = this.add.image(0, 0, 'InvisiblePixel').setScale(config.width, config.height)
         let invisiblePixel = this.invisiblePixel
         invisiblePixel.setOrigin(0, 0)
+        invisiblePixel.depth = 2
 
         self.cameras.main.fadeIn(FADE_DURATION)
         invisiblePixel.setInteractive()
@@ -77,7 +78,7 @@ export default class LobbyScene extends Phaser.Scene {
                     self.scene.start('Pending Game', button.gameData)
                 })
             })
-		}
+        }
 	}
 
     updateSlot(updateInfo) {
