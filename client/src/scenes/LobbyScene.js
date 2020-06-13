@@ -15,7 +15,7 @@ export default class LobbyScene extends Phaser.Scene {
     create() {
         let self = this
 
-        this.lobbyButtons = []
+        this.lobbyButtons = {}
 		this.lobbyLabels = []
 
         this.clickSound = this.sound.add('click')
@@ -63,17 +63,12 @@ export default class LobbyScene extends Phaser.Scene {
         let invisiblePixel = this.invisiblePixel
 		for(var i = 0; i < serverDataAsList.length; i++) {
             var gameData = serverDataAsList[i]
-            var buttonText = ''
             let callback = this.joinGame
-            if(gameData.state == 'empty') {
-                buttonText = gameData.roomNumber + ': Join Game (0/2)'
-                callback = this.joinGame
-            } else {
-                buttonText = 'Game Full'
-                callback = this.gameFull
-            }
+            var roomNumber = gameData.roomNumber
+            var numberOfPlayers = Object.keys(gameData.players).length
+            var buttonText = roomNumber + ': Join Game (' + numberOfPlayers + '/2)'
             
-            this.lobbyButtons[i] = new LobbyButton(this, 400, 300 + i*70, buttonText, gameData, function() {
+            this.lobbyButtons[gameData.id] = new LobbyButton(this, 400, 300 + i*70, buttonText, gameData, function() {
                 let button = this
                 clickSound.play()
                 self.cameras.main.fadeOut(FADE_DURATION)
@@ -81,13 +76,30 @@ export default class LobbyScene extends Phaser.Scene {
                 self.cameras.main.once('camerafadeoutcomplete', function (camera) {
                     self.scene.start('Pending Game', button.gameData)
                 })
-            }, i)
+            })
 		}
 	}
 
     updateSlot(updateInfo) {
         console.log('LobbyScene.updateSlot')
         console.log(updateInfo)
+        console.log(updateInfo.gameId)
+        console.log(updateInfo.pendingGame)
+        console.log('players: ' + Object.keys(updateInfo.pendingGame.players).length)
+        var roomNumber = updateInfo.pendingGame.roomNumber
+        var numberOfPlayers = Object.keys(updateInfo.pendingGame.players).length
+        this.lobbyButtons[updateInfo.gameId].updateText(roomNumber + ': Join Game (' + numberOfPlayers + '/2)')   
+    }
+
+    getMethods(obj)
+    {
+        var res = [];
+        for(var m in obj) {
+            if(typeof obj[m] == "function") {
+                res.push(m)
+            }
+        }
+        return res;
     }
 
     update() {

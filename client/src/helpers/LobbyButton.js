@@ -3,6 +3,7 @@ import 'phaser';
 export default class LobbyButton extends Phaser.GameObjects.Container {
   constructor(scene, x, y, text, gameData, onButtonClick) {
     super(scene)
+
     this.scene = scene
     this.onButtonClick = onButtonClick
     this.gameData = gameData
@@ -37,5 +38,9 @@ export default class LobbyButton extends Phaser.GameObjects.Container {
     this.y = y
 
     this.scene.add.existing(this)
+  }
+
+  updateText(newText) {
+    this.text.setText(newText)
   }
 }

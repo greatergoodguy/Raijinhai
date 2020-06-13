@@ -90,12 +90,12 @@ function leavePendingGame() {
 
 	if(lobbySlot.getNumPlayers()== 0) {
 		lobbySlot.state = "empty";
-		io.in(lobbyId).emit("update slot", {gameId: this.gameId, newState: "empty"});
+		io.in(lobbyId).emit("update slot", {gameId: this.gameId, pendingGame: lobbySlot});
 	}
 
 	if(lobbySlot.state == "full") {
 		lobbySlot.state = "joinable";
-		io.in(lobbyId).emit("update slot", {gameId: this.gameId, newState: "joinable"});
+		io.in(lobbyId).emit("update slot", {gameId: this.gameId, pendingGame: lobbySlot});
 	}
 };
 
