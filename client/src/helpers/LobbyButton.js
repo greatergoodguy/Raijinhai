@@ -43,4 +43,12 @@ export default class LobbyButton extends Phaser.GameObjects.Container {
   updateText(newText) {
     this.text.setText(newText)
   }
+
+  setInteractive() {
+    this.button.setInteractive()
+  }
+
+  disableInteractive() {
+    this.button.disableInteractive()
+  }
 }

@@ -64,12 +64,8 @@ export default class LobbyScene extends Phaser.Scene {
         let invisiblePixel = this.invisiblePixel
 		for(var i = 0; i < serverDataAsList.length; i++) {
             var gameData = serverDataAsList[i]
-            let callback = this.joinGame
-            var roomNumber = gameData.roomNumber
-            var numberOfPlayers = Object.keys(gameData.players).length
-            var buttonText = roomNumber + ': Join Game (' + numberOfPlayers + '/2)'
             
-            this.lobbyButtons[gameData.id] = new LobbyButton(this, 400, 300 + i*70, buttonText, gameData, function() {
+            this.lobbyButtons[gameData.id] = new LobbyButton(this, 400, 300 + i*70, '1: Join Game (0/2)', gameData, function() {
                 let button = this
                 clickSound.play()
                 self.cameras.main.fadeOut(FADE_DURATION)
@@ -78,6 +74,9 @@ export default class LobbyScene extends Phaser.Scene {
                     self.scene.start('Pending Game', button.gameData)
                 })
             })
+            
+            this.setLobbyButton(this.lobbyButtons[gameData.id], gameData)
+
         }
 	}
 
@@ -87,9 +86,20 @@ export default class LobbyScene extends Phaser.Scene {
         console.log(updateInfo.gameId)
         console.log(updateInfo.pendingGame)
         console.log('players: ' + Object.keys(updateInfo.pendingGame.players).length)
-        var roomNumber = updateInfo.pendingGame.roomNumber
-        var numberOfPlayers = Object.keys(updateInfo.pendingGame.players).length
-        this.lobbyButtons[updateInfo.gameId].updateText(roomNumber + ': Join Game (' + numberOfPlayers + '/2)')   
+        this.setLobbyButton(this.lobbyButtons[updateInfo.gameId], updateInfo.pendingGame)
+    }
+
+    setLobbyButton(lobbyButton, gameData) {
+        var roomNumber = gameData.roomNumber
+        var numberOfPlayers = Object.keys(gameData.players).length
+
+        if(numberOfPlayers >= 2) {
+            lobbyButton.updateText(roomNumber + ': Full Game (' + numberOfPlayers + '/2)')   
+            lobbyButton.disableInteractive()
+        } else {
+            lobbyButton.updateText(roomNumber + ': Join Game (' + numberOfPlayers + '/2)')   
+            lobbyButton.setInteractive()
+        }
     }
 
     getMethods(obj)
