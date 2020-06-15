@@ -11,6 +11,7 @@ var PendingGame = function(id, roomNumber) {
     this.id = id
     this.roomNumber = roomNumber
 	this.state = "empty"
+	this.ready = false
 	this.colors = [{colorName: "white", available: true}, {colorName: "black", available: true}]
 }
 
@@ -29,7 +30,7 @@ PendingGame.prototype = {
 	},
 
 	addPlayer: function(id) {
-		this.players[id] = {color: this.claimFirstAvailableColor()}
+		this.players[id] = {color: this.claimFirstAvailableColor(), ready: false}
 	},
 
 	claimFirstAvailableColor: function() {

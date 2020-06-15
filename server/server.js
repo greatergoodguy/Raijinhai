@@ -50,12 +50,32 @@ io.on('connection', function(socket) {
     socket.on('enter lobby', Lobby.onEnterLobby)
     socket.on('enter pending game', Lobby.onEnterPendingGame)
     socket.on('leave pending game', Lobby.onLeavePendingGame)
+    socket.on('on player ready', onPlayerReady)
 })
 
 //http.listen(3000, function() {
 http.listen(process.env.PORT || 3000, function() {
     console.log('Server started')
 })
+
+function onPlayerReady(data) {
+    var lobbySlots = Lobby.getLobbySlots()
+    var lobby = lobbySlots[this.gameId]
+
+    console.log('')
+    console.log('Server - onPlayerReady')
+    console.log('this.gameId: ' + this.gameId)
+    Lobby.onPlayerReady(this, data)
+    console.log(lobby)
+
+    if(lobby.ready) {
+        startGame(lobby)
+    }
+}
+
+function startGame(pendingGame) {
+    console.log('Start Game')
+}
 
 function onClientDisconnect() {
     

@@ -22,6 +22,8 @@ export default class PendingGameScene extends Phaser.Scene {
         let socket = this.game.socket
         let title = 'Room ' + this.gameData.roomNumber
 
+        let areYouReady = false
+
         socket.emit("enter pending game", {gameId: this.gameData.id})
 
         var clickSound = this.sound.add('click')
@@ -44,14 +46,98 @@ export default class PendingGameScene extends Phaser.Scene {
 
         let invisiblePixel = this.add.image(0, 0, 'InvisiblePixel').setScale(config.width, config.height)
         invisiblePixel.setOrigin(0, 0)
+        invisiblePixel.depth = 2
 
         self.cameras.main.fadeIn(FADE_DURATION)
         invisiblePixel.setInteractive()
         self.cameras.main.once('camerafadeincomplete', function (camera) {
             invisiblePixel.disableInteractive()
         })
+
+        this.youText = this.add.text(400, 300, 'You: Not Ready', { fontSize: '32px', fill: '#000' })
+        this.youText.setColor('#ff0000')
+        this.opponentText = this.add.text(400, 400, 'Empty', { fontSize: '32px', fill: '#000' })
+        this.opponentText.setColor('#ff0000')
+
+        this.buttonReady = new Button(this, 400, 500, 'Ready', function() {
+            clickSound.play()
+            areYouReady = !areYouReady
+            if(areYouReady) {
+                self.youText.setText('You: Ready')
+                self.youText.setColor('#00ff00')
+            } else {
+                self.youText.setText('You: Not Ready')
+                self.youText.setColor('#ff0000')
+            }
+            socket.emit('on player ready', {gameId: self.gameData.id, playerId: socket.id, ready: areYouReady})
+        })
+
+        socket.on("show current players", this.populateCharacterSquares.bind(this));
+        socket.on("player ready", this.playerReady.bind(this));
+		socket.on("player joined", this.playerJoined.bind(this));
+		socket.on("player left", this.playerLeft.bind(this));
+		socket.on("start game on client", this.startGame);
     }
 
     update() {
     }
+
+
+	populateCharacterSquares(data) {
+        console.log('PendingGameScene.populateCharacterSquares()')
+        console.log(data)
+        this.updateOpponentReady(data)
+    }
+
+    playerReady(data) {
+        console.log('PendingGameScene.playerReady()')
+        console.log(data)
+        this.updateOpponentReady(data)
+    }
+    
+    playerJoined(data) {
+        console.log('PendingGameScene.playerJoined()')
+        console.log(data)
+        this.updateOpponentReady(data)
+    }
+    
+    playerLeft(data) {
+        console.log('PendingGameScene.playerLeft()')
+        console.log(data)
+        this.updateOpponentReady(data)
+    }
+
+
+    updateOpponentReady(data) {
+        let socket = this.game.socket
+        var playerIds = Object.keys(data.players)
+        var yourId = socket.id
+        var opponentId = playerIds.find(id => id != socket.id)
+        var opponentData = data.players[opponentId]
+        console.log(Object.keys(data.players))
+        console.log(Object.keys(data.players).length)
+        console.log('yourId: ' + yourId)
+        console.log('opponentId: ' + opponentId)
+        console.log(opponentData)
+
+        if(!opponentId) {
+            this.opponentText.setText('No Opponent')
+            this.opponentText.setColor('#ff0000')
+        } else if(!opponentData.ready) {
+            this.opponentText.setText('Opponent: Not Ready')
+            this.opponentText.setColor('#ff0000')
+        } else {
+            this.opponentText.setText('Opponent: Ready')
+            this.opponentText.setColor('#00ff00')
+        }
+    }
+
+    
+    startGame(data) {
+        console.log('PendingGameScene.startGame()')
+        console.log(data)
+		// repeatingBombTilesprite.doNotDestroy = false;
+		// socket.removeAllListeners();
+		// game.state.start("Level", true, false, data.mapName, data.players, this.id);
+	}
 }
