@@ -101,6 +101,12 @@ var Lobby = {
 		} else {
 			pendingGame.ready = false
 		}
+	},
+
+	onGameStart: function(socket, data) {
+		console.log('Lobby.onGameStart()')
+		var pendingGame = lobbySlots[data.gameId]
+		pendingGame['players'][data.playerId]['gameStart'] = true
 	}
 };
 

@@ -20,27 +20,18 @@ export default class Game extends Phaser.Scene {
         })
     }
 
-    preload() {
-        this.load.image('cyanCardFront', 'src/assets/CyanCardFront.png')
-        this.load.image('cyanCardBack', 'src/assets/CyanCardBack.png')
-        this.load.image('magentaCardFront', 'src/assets/MagentaCardFront.png')
-        this.load.image('magentaCardBack', 'src/assets/MagentaCardBack.png')
-
-        this.load.image('Card01Soldier', 'src/assets/Card01Soldier.png')
-        this.load.image('Card02Calvary', 'src/assets/Card02Calvary.png')
-        this.load.image('Card03Elephant', 'src/assets/Card03Elephant.png')
-        this.load.image('Card04Shogun', 'src/assets/Card04Shogun.png')
-        this.load.image('Card05Queen', 'src/assets/Card05Queen.png')
-        this.load.image('Card06King', 'src/assets/Card06King.png')
-        this.load.image('Card07Indra', 'src/assets/Card07Indra.png')
-        this.load.image('CardTemplateBack', 'src/assets/CardTemplateBack.png')
-    }
+    init(gameId) {
+        this.gameId = gameId
+	}
 
     create() {
         let self = this
 
         this.isPlayerA = false
         this.opponentCards = []
+
+        let titleImage = this.add.image(0, 0, 'TitleImage');
+        titleImage.setOrigin(0, 0)
 
         this.zone = new Zone(this)
         this.playerDropZone = this.zone.renderZone(400, 375)
@@ -52,14 +43,19 @@ export default class Game extends Phaser.Scene {
         
         this.dealer = new Dealer(this)
 
-        let socket = io('http://localhost:3000')
+        //let socket = io('http://localhost:3000')
         //let socket = io('https://raijinhai-server.herokuapp.com')
-        socket.on('connect', function() {
-            console.log('Connected!' + socket.id)
-        })
+        // socket.on('connect', function() {
+        //     console.log('Connected!' + socket.id)
+        // })
+
+
+        let socket = this.game.socket
+        socket.emit("on game start", {gameId: this.gameId, playerId: socket.id})
 
         let playerText = this.add.text(75, 520, ['']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF').setInteractive()
         this.gameStart = this.add.text(75, 350, ['GAME START']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF').setInteractive()
+        this.gameStart.visible = false
         this.zoneText = this.add.text(700, 375, ['']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF').setInteractive()
         this.add.text(350, 520, ['Your Zone']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF')
         this.add.text(1050, 520, ['Opponent Zone']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF')

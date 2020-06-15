@@ -51,6 +51,7 @@ io.on('connection', function(socket) {
     socket.on('enter pending game', Lobby.onEnterPendingGame)
     socket.on('leave pending game', Lobby.onLeavePendingGame)
     socket.on('on player ready', onPlayerReady)
+    socket.on('on game start', onGameStart)
 })
 
 //http.listen(3000, function() {
@@ -69,12 +70,30 @@ function onPlayerReady(data) {
     console.log(lobby)
 
     if(lobby.ready) {
-        startGame(lobby)
+        console.log('Players Ready')
+        console.log(lobby)
+        io.in(lobby.id).emit("start game on client", {});
     }
 }
 
-function startGame(pendingGame) {
-    console.log('Start Game')
+
+function onGameStart(data) {
+    var lobbySlots = Lobby.getLobbySlots()
+    var lobby = lobbySlots[this.gameId]
+
+    Lobby.onGameStart(this, data)
+
+    var gameStart = Object.values(lobby.players).reduce(function(accumulator, currentValue) {
+        return accumulator && currentValue.gameStart
+    }, true)
+
+    players = Object.keys(lobby.players)
+
+    if(gameStart) {
+        console.log('Start Game')
+        turnData = {}
+        io.in(lobby.id).emit('dealCards', createGameData(players), createInvertedGameData(players))
+    }
 }
 
 function onClientDisconnect() {

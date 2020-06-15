@@ -18,7 +18,7 @@ export default class PendingGameScene extends Phaser.Scene {
 
     create() {
         console.log('PendingGameScene.create()')
-        let self = this
+        var self = this
         let socket = this.game.socket
         let title = 'Room ' + this.gameData.roomNumber
 
@@ -37,6 +37,7 @@ export default class PendingGameScene extends Phaser.Scene {
             invisiblePixel.setInteractive()
             self.cameras.main.once('camerafadeoutcomplete', function (camera) {
                 socket.emit("leave pending game")
+                socket.removeAllListeners()
                 self.scene.start('Lobby')
             })
         })
@@ -76,7 +77,16 @@ export default class PendingGameScene extends Phaser.Scene {
         socket.on("player ready", this.playerReady.bind(this));
 		socket.on("player joined", this.playerJoined.bind(this));
 		socket.on("player left", this.playerLeft.bind(this));
-		socket.on("start game on client", this.startGame);
+		socket.on("start game on client", function(data) {
+            self.cameras.main.fadeOut(FADE_DURATION)
+            invisiblePixel.setInteractive()
+            console.log('PendingGameScene.startGame()')
+            console.log(data)
+            self.cameras.main.once('camerafadeoutcomplete', function (camera) {
+                socket.removeAllListeners()
+                self.scene.start('Game', self.gameData.id)
+            })
+        });
     }
 
     update() {
@@ -131,13 +141,4 @@ export default class PendingGameScene extends Phaser.Scene {
             this.opponentText.setColor('#00ff00')
         }
     }
-
-    
-    startGame(data) {
-        console.log('PendingGameScene.startGame()')
-        console.log(data)
-		// repeatingBombTilesprite.doNotDestroy = false;
-		// socket.removeAllListeners();
-		// game.state.start("Level", true, false, data.mapName, data.players, this.id);
-	}
 }
