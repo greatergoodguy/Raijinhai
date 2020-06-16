@@ -1,7 +1,7 @@
 import { FADE_DURATION }  from '../config/const'
 import config from '../config/config'
-import Button from '../helpers/button';
-import LobbyButton from '../helpers/LobbyButton';
+import Button from '../helpers/button'
+import LobbyButton from '../helpers/LobbyButton'
 
 export default class LobbyScene extends Phaser.Scene {
     constructor() {

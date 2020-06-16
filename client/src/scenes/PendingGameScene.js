@@ -73,10 +73,10 @@ export default class PendingGameScene extends Phaser.Scene {
             socket.emit('on player ready', {gameId: self.gameData.id, playerId: socket.id, ready: areYouReady})
         })
 
-        socket.on("show current players", this.populateCharacterSquares.bind(this));
-        socket.on("player ready", this.playerReady.bind(this));
-		socket.on("player joined", this.playerJoined.bind(this));
-		socket.on("player left", this.playerLeft.bind(this));
+        socket.on("show current players", this.populateCharacterSquares.bind(this))
+        socket.on("player ready", this.playerReady.bind(this))
+		socket.on("player joined", this.playerJoined.bind(this))
+		socket.on("player left", this.playerLeft.bind(this))
 		socket.on("start game on client", function(data) {
             self.cameras.main.fadeOut(FADE_DURATION)
             invisiblePixel.setInteractive()
@@ -86,7 +86,7 @@ export default class PendingGameScene extends Phaser.Scene {
                 socket.removeAllListeners()
                 self.scene.start('Game', self.gameData.id)
             })
-        });
+        })
     }
 
     update() {

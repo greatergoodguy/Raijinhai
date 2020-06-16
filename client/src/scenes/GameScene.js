@@ -2,6 +2,7 @@ import Card from '../helpers/card'
 import Zone from '../helpers/zone'
 import Dealer from '../helpers/dealer'
 import io from 'socket.io-client'
+import Button from '../helpers/button';
 
 const pieceValues = {
     'Card05Queen': 0,
@@ -29,6 +30,7 @@ export default class Game extends Phaser.Scene {
 
         this.isPlayerA = false
         this.opponentCards = []
+        this.yourCards = []
 
         let titleImage = this.add.image(0, 0, 'TitleImage');
         titleImage.setOrigin(0, 0)
@@ -163,9 +165,28 @@ export default class Game extends Phaser.Scene {
             self.playerZoneCard = gameObject
             socket.emit('cardPlayed', self.gameId, gameObject.texture.key, socket.id)
         })
+
+        socket.on("player left", this.playerLeft.bind(this))
     }
 
-    update() {
+    update() {}
 
+    playerLeft(data) {
+        console.log('GameScene.playerLeft()')
+        console.log(data)
+
+        var opponentCard
+        for(opponentCard of this.opponentCards) {
+            opponentCard.data = null
+        }
+
+        var yourCard
+        for(yourCard of this.yourCards) {
+            yourCard.data = null
+        }
+
+        this.game.socket.emit("leave pending game")
+        this.game.socket.removeAllListeners()
+        this.scene.start('Title')
     }
 }

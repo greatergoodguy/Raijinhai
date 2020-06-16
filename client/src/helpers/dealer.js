@@ -20,16 +20,16 @@ export default class Dealer {
                 }
             }
 
-            new Card(scene, xOffset + 130*0, 650).render('Card01Soldier')
-            new Card(scene, xOffset + 130*1, 650).render('Card01Soldier')
-            new Card(scene, xOffset + 130*2, 650).render('Card02Calvary')
-            new Card(scene, xOffset + 130*3, 650).render('Card02Calvary')
-            new Card(scene, xOffset + 130*4, 650).render('Card03Elephant')
-            new Card(scene, xOffset + 130*5, 650).render('Card03Elephant')
-            new Card(scene, xOffset + 130*6, 650).render('Card04Shogun')
-            new Card(scene, xOffset + 130*7, 650).render('Card05Queen')
-            new Card(scene, xOffset + 130*8, 650).render('Card06King')
-            new Card(scene, xOffset + 130*9, 650).render('Card07Indra')
+            scene.yourCards.push(new Card(scene, xOffset + 130*0, 650).render('Card01Soldier'))
+            scene.yourCards.push(new Card(scene, xOffset + 130*1, 650).render('Card01Soldier'))
+            scene.yourCards.push(new Card(scene, xOffset + 130*2, 650).render('Card02Calvary'))
+            scene.yourCards.push(new Card(scene, xOffset + 130*3, 650).render('Card02Calvary'))
+            scene.yourCards.push(new Card(scene, xOffset + 130*4, 650).render('Card03Elephant'))
+            scene.yourCards.push(new Card(scene, xOffset + 130*5, 650).render('Card03Elephant'))
+            scene.yourCards.push(new Card(scene, xOffset + 130*6, 650).render('Card04Shogun'))
+            scene.yourCards.push(new Card(scene, xOffset + 130*7, 650).render('Card05Queen'))
+            scene.yourCards.push(new Card(scene, xOffset + 130*8, 650).render('Card06King'))
+            scene.yourCards.push(new Card(scene, xOffset + 130*9, 650).render('Card07Indra'))
         }
     }
 }
