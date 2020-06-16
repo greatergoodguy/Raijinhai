@@ -3,7 +3,7 @@ const http = require('http').createServer(server)
 io = require('socket.io')(http)
 
 var Lobby = require('./lobby')
-let players = []
+let playersDeprecated = []
 let turnData = {}
 
 
@@ -22,30 +22,25 @@ Lobby.initialize()
 
 io.on('connection', function(socket) {
     console.log('A user connected: ' + socket.id)
-    players.push(socket.id)
-    console.log('players: ' + players)
+    playersDeprecated.push(socket.id)
+    console.log('playersDeprecated: ' + playersDeprecated)
 
     socket.on('dealCards', function() {
         turnData = {}
-        io.emit('dealCards', createGameData(players), createInvertedGameData(players))
+        io.emit('dealCards', createGameData(playersDeprecated), createInvertedGameData(playersDeprecated))
     })
 
-    socket.on('cardPlayed', function(textureKey, socketId) {
-        io.emit('cardPlayed', socketId)
-        turnData[socketId] = textureKey
+    socket.on('cardPlayed', function(gameId, textureKey, socketId) {
+        io.in(gameId).emit('cardPlayed', socketId)
+        turnData[gameId][socketId] = textureKey
         console.log()
 
-        if(Object.keys(turnData).length === 2) {
-            roundFinished(turnData)
+        if(Object.keys(turnData[gameId]).length === 2) {
+            roundFinished(gameId)
         }
     })
 
     socket.on('disconnect', onClientDisconnect)
-
-    // socket.on('disconnect', function() {
-    //     console.log('A user disconnected: ' + socket.id)
-    //     players = players.filter(player => player !== socket.id)
-    // })
 
     socket.on('enter lobby', Lobby.onEnterLobby)
     socket.on('enter pending game', Lobby.onEnterPendingGame)
@@ -91,7 +86,7 @@ function onGameStart(data) {
 
     if(gameStart) {
         console.log('Start Game')
-        turnData = {}
+        turnData[this.gameId] = {}
         io.in(lobby.id).emit('dealCards', createGameData(players), createInvertedGameData(players))
     }
 }
@@ -99,7 +94,7 @@ function onGameStart(data) {
 function onClientDisconnect() {
     
     console.log('A user disconnected: ' + this.id)
-    players = players.filter(player => player !== this.id)
+    playersDeprecated = playersDeprecated.filter(playersDeprecated => playersDeprecated !== this.id)
     console.log(this.gameId)
 	if (this.gameId == null) {
 		return;
@@ -138,19 +133,27 @@ function onClientDisconnect() {
 	}
 }
 
-function roundFinished() {
+function roundFinished(gameId) {
     console.log('roundFinished')
+    console.log(gameId)
+    console.log(turnData[gameId])
 
-    var player1PointValue = pieceValues[turnData[players[0]]]
-    var player2PointValue = pieceValues[turnData[players[1]]]
+    var lobbySlots = Lobby.getLobbySlots()
+    var lobby = lobbySlots[gameId]
+    console.log(lobbySlots)
+    console.log(lobby)
+    players = Object.keys(lobby.players)
+
+    var player1PointValue = pieceValues[turnData[gameId][players[0]]]
+    var player2PointValue = pieceValues[turnData[gameId][players[1]]]
 
     var roundData = {}
     roundData[players[0]] = {}
     roundData[players[1]] = {}
-    roundData[players[0]]['piece'] = turnData[players[0]]
-    roundData[players[0]]['opponentPiece'] = turnData[players[1]]
-    roundData[players[1]]['piece'] = turnData[players[1]]
-    roundData[players[1]]['opponentPiece'] = turnData[players[0]]
+    roundData[players[0]]['piece'] = turnData[gameId][players[0]]
+    roundData[players[0]]['opponentPiece'] = turnData[gameId][players[1]]
+    roundData[players[1]]['piece'] = turnData[gameId][players[1]]
+    roundData[players[1]]['opponentPiece'] = turnData[gameId][players[0]]
     if(player1PointValue > player2PointValue) {
         roundData[players[0]]['roundWinner'] = true
         roundData[players[1]]['roundWinner'] = false
@@ -180,13 +183,13 @@ function roundFinished() {
         roundData['isGameOver'] = false
     }
 
-    if(turnData[players[0]] === 'Card07Indra') {
+    if(turnData[gameId][players[0]] === 'Card07Indra') {
         roundData[players[0]]['destroyPiece'] = true
-    } else if(turnData[players[1]] === 'Card07Indra') {
+    } else if(turnData[gameId][players[1]] === 'Card07Indra') {
         roundData[players[1]]['destroyPiece'] = true
     } 
 
-    if(turnData[players[0]] === 'Card07Indra' && turnData[players[1]] === 'Card06King') {
+    if(turnData[gameId][players[0]] === 'Card07Indra' && turnData[gameId][players[1]] === 'Card06King') {
         roundData[players[0]]['roundWinner'] = true
         roundData[players[1]]['roundWinner'] = false
         roundData[players[0]]['zoneText'] = "You Win The Game"
@@ -195,7 +198,7 @@ function roundFinished() {
         roundData[players[1]]['destroyPiece'] = true
         roundData['isDraw'] = false
         roundData['isGameOver'] = true
-    } else if(turnData[players[0]] === 'Card06King' && turnData[players[1]] === 'Card07Indra') {
+    } else if(turnData[gameId][players[0]] === 'Card06King' && turnData[gameId][players[1]] === 'Card07Indra') {
         roundData[players[0]]['roundWinner'] = false
         roundData[players[1]]['roundWinner'] = true
         roundData[players[0]]['zoneText'] = "You Lose The Game"
@@ -206,7 +209,7 @@ function roundFinished() {
         roundData['isGameOver'] = true
     }
 
-    if(turnData[players[0]] === 'Card05Queen' && turnData[players[1]] === 'Card06King') {
+    if(turnData[gameId][players[0]] === 'Card05Queen' && turnData[gameId][players[1]] === 'Card06King') {
         roundData[players[0]]['roundWinner'] = true
         roundData[players[1]]['roundWinner'] = false
         roundData[players[0]]['zoneText'] = "You Win The Game"
@@ -215,7 +218,7 @@ function roundFinished() {
         roundData[players[1]]['destroyPiece'] = true
         roundData['isDraw'] = false
         roundData['isGameOver'] = true
-    } else if(turnData[players[0]] === 'Card06King' && turnData[players[1]] === 'Card05Queen') {
+    } else if(turnData[gameId][players[0]] === 'Card06King' && turnData[gameId][players[1]] === 'Card05Queen') {
         roundData[players[0]]['roundWinner'] = false
         roundData[players[1]]['roundWinner'] = true
         roundData[players[0]]['zoneText'] = "You Lose The Game"
@@ -226,11 +229,11 @@ function roundFinished() {
         roundData['isGameOver'] = true
     }
 
-    io.emit('turnFinished', roundData)
+    io.in(gameId).emit('turnFinished', roundData)
+    turnData[gameId] = {}
     if(!roundData['isGameOver']) {
         setTimeout(function() { 
-            io.emit('newRound', roundData)
-            turnData = {}
+            io.in(gameId).emit('newRound', roundData)
         }, 4000);
     }
 }

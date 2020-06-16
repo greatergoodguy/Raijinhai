@@ -161,7 +161,7 @@ export default class Game extends Phaser.Scene {
             gameObject.y = dropZone.y
             gameObject.disableInteractive()
             self.playerZoneCard = gameObject
-            socket.emit('cardPlayed', gameObject.texture.key, socket.id)
+            socket.emit('cardPlayed', self.gameId, gameObject.texture.key, socket.id)
         })
     }
 

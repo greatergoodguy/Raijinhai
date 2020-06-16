@@ -59,6 +59,7 @@ export default class LobbyScene extends Phaser.Scene {
         console.log('LobbyScene.addSlots')
         console.log(serverData)
         let serverDataAsList = Object.values(serverData)
+        let socket = this.game.socket
         let self = this
         let clickSound = this.clickSound
         let invisiblePixel = this.invisiblePixel
@@ -71,6 +72,7 @@ export default class LobbyScene extends Phaser.Scene {
                 self.cameras.main.fadeOut(FADE_DURATION)
                 invisiblePixel.setInteractive()
                 self.cameras.main.once('camerafadeoutcomplete', function (camera) {
+                    socket.removeAllListeners()
                     self.scene.start('Pending Game', button.gameData)
                 })
             })

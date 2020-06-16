@@ -25,8 +25,10 @@ PendingGame.prototype = {
 	},
 
 	removePlayer: function(id) {
-		this.colors[colorIndices[this.players[id].color]].available = true
-		delete this.players[id]
+		if(id in this.players) {
+			this.colors[colorIndices[this.players[id].color]].available = true
+			delete this.players[id]
+		}
 	},
 
 	addPlayer: function(id) {

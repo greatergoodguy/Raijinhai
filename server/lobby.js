@@ -53,7 +53,6 @@ var Lobby = {
 	onEnterPendingGame: function(data) {
 		console.log('Lobby.onEnterPendingGame()')
 
-		console.log(data)
 		var pendingGame = lobbySlots[data.gameId];
 		pendingGame.state = "joinable"
 	
@@ -77,16 +76,13 @@ var Lobby = {
 
 	onPlayerReady: function(socket, data) {
 		console.log('Lobby.onPlayerReady()')
-		console.log(data)
 		var pendingGame = lobbySlots[data.gameId]
 		pendingGame['players'][data.playerId]['ready'] = data.ready
-
-		console.log(pendingGame)
 
 		socket.broadcast.to(data.gameId).emit("player ready", {players: pendingGame.players})
 
 		console.log(Object.keys(pendingGame.players).length)
-		console.log(Object.values(pendingGame.players))
+		//console.log(Object.values(pendingGame.players))
 
 		var roomHasTwoPlayers = Object.keys(pendingGame.players).length == 2
 		
