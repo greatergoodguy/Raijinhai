@@ -76,7 +76,8 @@ export default class PendingGameScene extends Phaser.Scene {
         socket.on("show current players", this.populateCharacterSquares.bind(this))
         socket.on("player ready", this.playerReady.bind(this))
 		socket.on("player joined", this.playerJoined.bind(this))
-		socket.on("player left", this.playerLeft.bind(this))
+        socket.on("player left", this.playerLeft.bind(this))
+        socket.on('disconnect', this.leavePendingGame.bind(this))
 		socket.on("start game on client", function(data) {
             self.cameras.main.fadeOut(FADE_DURATION)
             invisiblePixel.setInteractive()
@@ -87,6 +88,13 @@ export default class PendingGameScene extends Phaser.Scene {
                 self.scene.start('Game', self.gameData.id)
             })
         })
+    }
+
+    leavePendingGame() {
+        let socket = this.game.socket
+        socket.emit("leave pending game")
+        socket.removeAllListeners()
+        this.scene.start('Title')
     }
 
     update() {

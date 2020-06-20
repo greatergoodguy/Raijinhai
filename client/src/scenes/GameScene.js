@@ -58,7 +58,10 @@ export default class Game extends Phaser.Scene {
         let playerText = this.add.text(75, 520, ['']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF').setInteractive()
         this.gameStart = this.add.text(75, 350, ['GAME START']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF').setInteractive()
         this.gameStart.visible = false
-        this.zoneText = this.add.text(700, 375, ['']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF').setInteractive()
+        this.zoneText = this.add.text(730, 375, ['']).setFontSize(30).setFontFamily('Trebuchet MS').setColor('#ADD8E6').setInteractive()
+        this.zoneText.setStroke('#de77ae', 16)
+        this.zoneText.setShadow(2, 2, '#333333', 2, true, true)
+        this.zoneText.setOrigin(0.5, 0.5)
         this.add.text(350, 520, ['Your Zone']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF')
         this.add.text(1050, 520, ['Opponent Zone']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF')
 
@@ -167,6 +170,10 @@ export default class Game extends Phaser.Scene {
         })
 
         socket.on("player left", this.playerLeft.bind(this))
+
+        socket.on("endGame", this.endGame.bind(this))
+
+        socket.on('disconnect', this.endGame.bind(this))
     }
 
     update() {}
@@ -183,6 +190,37 @@ export default class Game extends Phaser.Scene {
         var yourCard
         for(yourCard of this.yourCards) {
             yourCard.data = null
+        }
+                
+        if(this.opponentZoneCard) {
+            this.opponentZoneCard.data = null
+        }
+        if(this.playerZoneCard) {
+            this.playerZoneCard.data = null
+        }
+
+        this.game.socket.emit("leave pending game")
+        this.game.socket.removeAllListeners()
+        this.scene.start('Title')
+    }
+
+    endGame() {
+        console.log('GameScene.endGame()')
+        var opponentCard
+        for(opponentCard of this.opponentCards) {
+            opponentCard.data = null
+        }
+
+        var yourCard
+        for(yourCard of this.yourCards) {
+            yourCard.data = null
+        }
+
+        if(this.opponentZoneCard) {
+            this.opponentZoneCard.data = null
+        }
+        if(this.playerZoneCard) {
+            this.playerZoneCard.data = null
         }
 
         this.game.socket.emit("leave pending game")

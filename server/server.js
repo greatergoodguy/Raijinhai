@@ -235,6 +235,10 @@ function roundFinished(gameId) {
         setTimeout(function() { 
             io.in(gameId).emit('newRound', roundData)
         }, 4000);
+    } else if(roundData['isGameOver']) {
+        setTimeout(function() { 
+            io.in(gameId).emit('endGame', roundData)
+        }, 4000);
     }
 }
 

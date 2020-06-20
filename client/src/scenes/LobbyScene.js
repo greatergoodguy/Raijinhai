@@ -53,6 +53,13 @@ export default class LobbyScene extends Phaser.Scene {
 			socket.on("add slots", this.addSlots.bind(this));
 			socket.on("update slot", this.updateSlot.bind(this));
         }
+        socket.on('disconnect', this.leaveLobby.bind(this))
+    }
+
+    leaveLobby() {
+        let socket = this.game.socket
+        socket.removeAllListeners()
+        this.scene.start('Title')
     }
 
     addSlots(serverData) {
@@ -116,13 +123,5 @@ export default class LobbyScene extends Phaser.Scene {
     }
 
     update() {
-    }
-
-    joinGame() {
-        console.log('LobbyScene.joinGame')
-    }
-
-    gameFull() {
-        console.log('LobbyScene.gameFull')
     }
 }

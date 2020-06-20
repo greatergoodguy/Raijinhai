@@ -120,9 +120,11 @@ function leavePendingGame() {
 	var lobbySlot = lobbySlots[this.gameId];
 
 	this.leave(this.gameId);
-	lobbySlot.removePlayer(this.id);
-	io.in(this.gameId).emit("player left", {players: lobbySlot.players});
-	io.in(lobbyId).emit("update slot", {gameId: this.gameId, pendingGame: lobbySlot});
+	if(lobbySlot) {
+		lobbySlot.removePlayer(this.id);
+		io.in(this.gameId).emit("player left", {players: lobbySlot.players});
+		io.in(lobbyId).emit("update slot", {gameId: this.gameId, pendingGame: lobbySlot});
+	}
 };
 
 module.exports = Lobby;
