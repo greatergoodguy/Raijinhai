@@ -53,8 +53,8 @@ export default class PreloaderScene extends Phaser.Scene {
 
         this.load.audio("click", "src/assets/sounds/click.ogg")
 
-        this.game.socket = io('http://localhost:3000')
-        //this.game.socket = io('https://raijinhai-server.herokuapp.com')
+        //this.game.socket = io('http://localhost:3000')
+        this.game.socket = io('https://raijinhai-server.herokuapp.com')
         
     }
 
