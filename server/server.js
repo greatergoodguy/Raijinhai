@@ -229,6 +229,17 @@ function roundFinished(gameId) {
         roundData['isGameOver'] = true
     }
 
+    if(turnData[gameId][players[0]] === 'Card06King' && turnData[gameId][players[1]] === 'Card06King') {
+        roundData[players[0]]['roundWinner'] = false
+        roundData[players[1]]['roundWinner'] = false
+        roundData[players[0]]['zoneText'] = "Both Kings destroyed, Both players lose"
+        roundData[players[1]]['zoneText'] = "Both Kings destroyed, Both players lose"
+        roundData[players[0]]['destroyPiece'] = true
+        roundData[players[1]]['destroyPiece'] = true
+        roundData['isDraw'] = true
+        roundData['isGameOver'] = true
+    } 
+
     io.in(gameId).emit('turnFinished', roundData)
     turnData[gameId] = {}
     if(!roundData['isGameOver']) {
