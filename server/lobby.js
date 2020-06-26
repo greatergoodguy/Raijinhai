@@ -77,6 +77,9 @@ var Lobby = {
 	onPlayerReady: function(socket, data) {
 		console.log('Lobby.onPlayerReady()')
 		var pendingGame = lobbySlots[data.gameId]
+		if(!pendingGame) {
+			return
+		}
 		pendingGame['players'][data.playerId]['ready'] = data.ready
 
 		socket.broadcast.to(data.gameId).emit("player ready", {players: pendingGame.players})
@@ -102,7 +105,9 @@ var Lobby = {
 	onGameStart: function(socket, data) {
 		console.log('Lobby.onGameStart()')
 		var pendingGame = lobbySlots[data.gameId]
-		pendingGame['players'][data.playerId]['gameStart'] = true
+		if(pendingGame) {
+			 pendingGame['players'][data.playerId]['gameStart'] = true
+		}
 	}
 };
 

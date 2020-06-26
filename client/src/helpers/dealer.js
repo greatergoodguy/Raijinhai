@@ -3,33 +3,51 @@ import Card from './card'
 export default class Dealer {
     constructor(scene) {
         this.dealCards = () => {
-            let xOffset = 80
+            // let xOffset = 70
 
-            if(scene.isPlayerA) {
-                console.log('isPlayerA')
-                for (let i = 0; i<10; i++) {
-                    let opponentCard = new Card(scene, xOffset + 130*i, 125)
-                    scene.opponentCards.push(opponentCard.render('CardTemplateBack').disableInteractive())
-                }
+            // if(scene.isPlayerA) {
+            //     console.log('isPlayerA')
+            //     for (let i = 0; i<10; i++) {
+            //         let opponentCard = new Card(scene, xOffset + 130*i, 125)
+            //         scene.opponentCards.push(opponentCard.render('CardTemplateBack').disableInteractive())
+            //     }
 
-            } else {
-                console.log('isPlayerB')
-                for (let i = 0; i<10; i++) {
-                    let opponentCard = new Card(scene, xOffset + 130*i, 125)
-                    scene.opponentCards.push(opponentCard.render('CardTemplateBack').disableInteractive())
-                }
-            }
+            // } else {
+            //     console.log('isPlayerB')
+            //     for (let i = 0; i<10; i++) {
+            //         let opponentCard = new Card(scene, xOffset + 130*i, 125)
+            //         scene.opponentCards.push(opponentCard.render('CardTemplateBack').disableInteractive())
+            //     }
+            // }
 
-            scene.yourCards.push(new Card(scene, xOffset + 130*0, 650).render('Card01Soldier'))
-            scene.yourCards.push(new Card(scene, xOffset + 130*1, 650).render('Card01Soldier'))
-            scene.yourCards.push(new Card(scene, xOffset + 130*2, 650).render('Card02Calvary'))
-            scene.yourCards.push(new Card(scene, xOffset + 130*3, 650).render('Card02Calvary'))
-            scene.yourCards.push(new Card(scene, xOffset + 130*4, 650).render('Card03Elephant'))
-            scene.yourCards.push(new Card(scene, xOffset + 130*5, 650).render('Card03Elephant'))
-            scene.yourCards.push(new Card(scene, xOffset + 130*6, 650).render('Card04Shogun'))
-            scene.yourCards.push(new Card(scene, xOffset + 130*7, 650).render('Card05Queen'))
-            scene.yourCards.push(new Card(scene, xOffset + 130*8, 650).render('Card06King'))
-            scene.yourCards.push(new Card(scene, xOffset + 130*9, 650).render('Card07Indra'))
+            let xOffset = 70
+            let offsetInterval = 100
+
+            let opponentCardYPos1 = 105
+            let opponentCardYPos2 = 255
+            scene.opponentCards.push(new Card(scene, xOffset + offsetInterval*0, opponentCardYPos1).render('CardTemplateBack').disableInteractive())
+            scene.opponentCards.push(new Card(scene, xOffset + offsetInterval*1, opponentCardYPos1).render('CardTemplateBack').disableInteractive())
+            scene.opponentCards.push(new Card(scene, xOffset + offsetInterval*2, opponentCardYPos1).render('CardTemplateBack').disableInteractive())
+            scene.opponentCards.push(new Card(scene, xOffset + offsetInterval*3, opponentCardYPos1).render('CardTemplateBack').disableInteractive())
+            scene.opponentCards.push(new Card(scene, xOffset + offsetInterval*4, opponentCardYPos1).render('CardTemplateBack').disableInteractive())
+            scene.opponentCards.push(new Card(scene, xOffset + offsetInterval*0, opponentCardYPos2).render('CardTemplateBack').disableInteractive())
+            scene.opponentCards.push(new Card(scene, xOffset + offsetInterval*1, opponentCardYPos2).render('CardTemplateBack').disableInteractive())
+            scene.opponentCards.push(new Card(scene, xOffset + offsetInterval*2, opponentCardYPos2).render('CardTemplateBack').disableInteractive())
+            scene.opponentCards.push(new Card(scene, xOffset + offsetInterval*3, opponentCardYPos2).render('CardTemplateBack').disableInteractive())
+            scene.opponentCards.push(new Card(scene, xOffset + offsetInterval*4, opponentCardYPos2).render('CardTemplateBack').disableInteractive())
+
+            let cardYPos1 = 720
+            let cardYPos2 = 870
+            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*0, cardYPos1).render('Card01Soldier'))
+            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*1, cardYPos1).render('Card01Soldier'))
+            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*2, cardYPos1).render('Card02Calvary'))
+            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*3, cardYPos1).render('Card02Calvary'))
+            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*4, cardYPos1).render('Card03Elephant'))
+            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*0, cardYPos2).render('Card03Elephant'))
+            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*1, cardYPos2).render('Card04Shogun'))
+            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*2, cardYPos2).render('Card05Queen'))
+            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*3, cardYPos2).render('Card06King'))
+            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*4, cardYPos2).render('Card07Indra'))
         }
     }
 }

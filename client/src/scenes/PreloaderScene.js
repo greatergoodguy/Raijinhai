@@ -20,6 +20,7 @@ export default class PreloaderScene extends Phaser.Scene {
             self.cameras.main.fadeOut(FADE_DURATION)
             self.cameras.main.once('camerafadeoutcomplete', function (camera) {
                 self.scene.start('Title')
+                //self.scene.start('Game')
             })
         })
     }
@@ -28,7 +29,7 @@ export default class PreloaderScene extends Phaser.Scene {
         this.displayLoader()
         this.load.image('TitleImage', 'src/assets/TitleImage.png')
         this.load.image('TitleImageShut', 'src/assets/TitleImageShut.png')
-        this.load.image('TableBoard', 'src/assets/TableBoard.jpeg')
+        this.load.image('TableBoard', 'src/assets/TableBoard.png')
 
         this.load.image('blueButton0', 'src/assets/ui/blue_button00.png')
         this.load.image('blueButton1', 'src/assets/ui/blue_button01.png')

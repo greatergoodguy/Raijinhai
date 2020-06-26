@@ -90,6 +90,10 @@ function onGameStart(data) {
     var lobby = lobbySlots[this.gameId]
 
     Lobby.onGameStart(this, data)
+    
+    if(!lobby) {
+        return
+    }
 
     var gameStart = Object.values(lobby.players).reduce(function(accumulator, currentValue) {
         return accumulator && currentValue.gameStart

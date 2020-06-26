@@ -2,7 +2,8 @@ import Card from '../helpers/card'
 import Zone from '../helpers/zone'
 import Dealer from '../helpers/dealer'
 import io from 'socket.io-client'
-import Button from '../helpers/button';
+import Button from '../helpers/button'
+import config from '../config/config'
 
 const pieceValues = {
     'Card05Queen': 0,
@@ -32,17 +33,17 @@ export default class Game extends Phaser.Scene {
         this.opponentCards = []
         this.yourCards = []
 
-        let titleImage = this.add.image(0, 0, 'TitleImage')
+        let titleImage = this.add.image(0, 0, 'TableBoard')
         titleImage.visible = false
         titleImage.setOrigin(0, 0)
 
-        let titleImageShut = this.add.image(0, 0, 'TitleImageShut')
+        let titleImageShut = this.add.image(0, 0, 'TableBoard')
         titleImageShut.setOrigin(0, 0)
 
         this.doorSound = this.sound.add('door')
 
         this.zone = new Zone(this)
-        this.playerDropZone = this.zone.renderZone(400, 375)
+        this.playerDropZone = this.zone.renderZone(config.width/2, 520)
         this.playerDropZoneOutline = this.zone.renderOutline(this.playerDropZone)
 
         this.opponentDropZone = this.zone.renderZone(1100, 375)
@@ -61,8 +62,12 @@ export default class Game extends Phaser.Scene {
         this.zoneText.setStroke('#de77ae', 16)
         this.zoneText.setShadow(2, 2, '#333333', 2, true, true)
         this.zoneText.setOrigin(0.5, 0.5)
-        this.add.text(350, 520, ['Your Zone']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF')
+        this.yourZoneText = this.add.text(config.width/2, 520, ['Your Zone']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#AA3509')
+        this.yourZoneText.setOrigin(0.5, 0)
         this.add.text(1050, 520, ['Opponent Zone']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF')
+
+        // TODO: Delete Me
+        // self.dealer.dealCards()
 
         socket.on('dealCards', function(gameData, invertedGameData) {
             console.log(gameData)
