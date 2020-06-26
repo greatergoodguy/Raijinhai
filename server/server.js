@@ -1,6 +1,20 @@
-const server = require('express')()
-const http = require('http').createServer(server)
-io = require('socket.io')(http)
+var express = require("express")
+var app = express()
+var server = require("http").Server(app)
+io = require("socket.io").listen(server)
+
+// var client_url = __dirname.split('/')
+// client_url.pop()
+// client_url = client_url.join('/') + '/client'
+
+var client_url = __dirname + '/client'
+
+app.use(express.static(client_url))
+console.log(client_url)
+
+// const server = require('express')()
+// const http = require('http').createServer(server)
+// io = require('socket.io')(http)
 
 var Lobby = require('./lobby')
 let playersDeprecated = []
@@ -49,8 +63,7 @@ io.on('connection', function(socket) {
     socket.on('on game start', onGameStart)
 })
 
-//http.listen(3000, function() {
-http.listen(process.env.PORT || 3000, function() {
+server.listen(process.env.PORT || 3000, function() {
     console.log('Server started')
 })
 
