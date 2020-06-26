@@ -33,6 +33,8 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.image('blueButton3', 'src/assets/ui/blue_button03.png')
         this.load.image('blueButton4', 'src/assets/ui/blue_button04.png')
         this.load.image('blueButton5', 'src/assets/ui/blue_button05.png')
+        this.load.image('buttonLong_brown', 'src/assets/ui/buttonLong_brown.png')
+        this.load.image('buttonLong_brown_pressed', 'src/assets/ui/buttonLong_brown_pressed.png')
         this.load.image('InvisiblePixel', 'src/assets/ui/InvisiblePixel.png')
 
         this.load.image('cyanCardFront', 'src/assets/CyanCardFront.png')
