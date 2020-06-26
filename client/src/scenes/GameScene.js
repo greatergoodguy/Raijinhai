@@ -32,8 +32,14 @@ export default class Game extends Phaser.Scene {
         this.opponentCards = []
         this.yourCards = []
 
-        let titleImage = this.add.image(0, 0, 'TitleImage');
+        let titleImage = this.add.image(0, 0, 'TitleImage')
+        titleImage.visible = false
         titleImage.setOrigin(0, 0)
+
+        let titleImageShut = this.add.image(0, 0, 'TitleImageShut')
+        titleImageShut.setOrigin(0, 0)
+
+        this.doorSound = this.sound.add('door')
 
         this.zone = new Zone(this)
         this.playerDropZone = this.zone.renderZone(400, 375)
@@ -44,13 +50,6 @@ export default class Game extends Phaser.Scene {
         this.opponentDropZoneOutline = this.zone.renderOutline(this.opponentDropZone)
         
         this.dealer = new Dealer(this)
-
-        //let socket = io('http://localhost:3000')
-        //let socket = io('https://raijinhai-server.herokuapp.com')
-        // socket.on('connect', function() {
-        //     console.log('Connected!' + socket.id)
-        // })
-
 
         let socket = this.game.socket
         socket.emit("on game start", {gameId: this.gameId, playerId: socket.id})
@@ -101,6 +100,9 @@ export default class Game extends Phaser.Scene {
             console.log(roundData)
             self.opponentZoneCard.setTexture(roundData[socket.id]['opponentPiece'])
             self.zoneText.setText(roundData[socket.id]['zoneText'])
+            self.doorSound.play()
+            titleImage.visible = true
+            titleImageShut.visible = false
         })
 
         socket.on('newRound', function(roundData) {
@@ -108,6 +110,10 @@ export default class Game extends Phaser.Scene {
             self.playerDropZone.setInteractive()
 
             self.zoneText.setText("")
+
+            self.doorSound.play()
+            titleImage.visible = false
+            titleImageShut.visible = true
 
             if(roundData[socket.id]['destroyPiece']) {
                 self.playerZoneCard.data = null

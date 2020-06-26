@@ -16,10 +16,10 @@ export default class HowToPlayScene extends Phaser.Scene {
 
         var clickSound = this.sound.add('click')
 
-        let titleImage = this.add.image(0, 0, 'TitleImage');
+        let titleImage = this.add.image(0, 0, 'TableBoard');
         titleImage.setOrigin(0, 0)
 
-        this.button1 = new Button(this, 50, 400, 'Back', function() {
+        this.button1 = new Button(this, config.width/2, 880, 'Back', function() {
             clickSound.play()
             self.cameras.main.fadeOut(FADE_DURATION)
             invisiblePixel.setInteractive()
@@ -28,7 +28,7 @@ export default class HowToPlayScene extends Phaser.Scene {
             })
         })
 
-        this.titleBitmapText = this.add.bitmapText(config.width/2, 50, 'khodijah', 'How To Play', 128)
+        this.titleBitmapText = this.add.bitmapText(config.width/2, 50, 'khodijah', 'How To Play', 84)
         this.titleBitmapText.setOrigin(0.5, 0)
 
         let invisiblePixel = this.add.image(0, 0, 'InvisiblePixel').setScale(config.width, config.height)

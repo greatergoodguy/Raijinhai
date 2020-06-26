@@ -21,10 +21,10 @@ export default class LobbyScene extends Phaser.Scene {
         this.clickSound = this.sound.add('click')
         let clickSound = this.clickSound
 
-        let titleImage = this.add.image(0, 0, 'TitleImage');
+        let titleImage = this.add.image(0, 0, 'TableBoard');
         titleImage.setOrigin(0, 0)
 
-        this.buttonBack = new Button(this, 50, 300, 'Back', function() {
+        this.buttonBack = new Button(this, config.width/2, 880, 'Back', function() {
             clickSound.play()
             self.cameras.main.fadeOut(FADE_DURATION)
             invisiblePixel.setInteractive()
@@ -73,7 +73,7 @@ export default class LobbyScene extends Phaser.Scene {
 		for(var i = 0; i < serverDataAsList.length; i++) {
             var gameData = serverDataAsList[i]
             
-            this.lobbyButtons[gameData.id] = new LobbyButton(this, 400, 300 + i*70, '1: Join Game (0/2)', gameData, function() {
+            this.lobbyButtons[gameData.id] = new LobbyButton(this, config.width/2, 300 + i*70, '1: Join Game (0/2)', gameData, function() {
                 let button = this
                 clickSound.play()
                 self.cameras.main.fadeOut(FADE_DURATION)
@@ -103,10 +103,12 @@ export default class LobbyScene extends Phaser.Scene {
         var numberOfPlayers = Object.keys(gameData.players).length
 
         if(numberOfPlayers >= 2) {
-            lobbyButton.updateText(roomNumber + ': Full Game (' + numberOfPlayers + '/2)')   
+            lobbyButton.updateText('Full (' + numberOfPlayers + '/2)')   
+            lobbyButton.setDisabled()
             lobbyButton.disableInteractive()
         } else {
-            lobbyButton.updateText(roomNumber + ': Join Game (' + numberOfPlayers + '/2)')   
+            lobbyButton.updateText('Room ' + roomNumber + ' (' + numberOfPlayers + '/2)')   
+            lobbyButton.setEnabled()
             lobbyButton.setInteractive()
         }
     }

@@ -11,7 +11,7 @@ export default class PreloaderScene extends Phaser.Scene {
 
     displayLoader() {
         let self = this
-        let loadingText = this.add.text(config.width/2, config.height/2, "Loading... 0%").setFontSize(72)
+        let loadingText = this.add.text(config.width/2, config.height/2, "Loading... 0%").setFontSize(48)
         loadingText.setOrigin(0.5, 0.5)    
         this.load.on('progress', function(progress) {
             loadingText.setText("Loading... " + Math.round(progress*100) + "%")
@@ -27,6 +27,9 @@ export default class PreloaderScene extends Phaser.Scene {
     preload() {
         this.displayLoader()
         this.load.image('TitleImage', 'src/assets/TitleImage.png')
+        this.load.image('TitleImageShut', 'src/assets/TitleImageShut.png')
+        this.load.image('TableBoard', 'src/assets/TableBoard.jpeg')
+
         this.load.image('blueButton0', 'src/assets/ui/blue_button00.png')
         this.load.image('blueButton1', 'src/assets/ui/blue_button01.png')
         this.load.image('blueButton2', 'src/assets/ui/blue_button02.png')
@@ -54,9 +57,10 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.bitmapFont('khodijah', 'src/assets/fonts/khodijah.png', 'src/assets/fonts/khodijah.fnt')
 
         this.load.audio("click", "src/assets/sounds/click.ogg")
+        this.load.audio("door", "src/assets/sounds/door.mp3")
 
-        //this.game.socket = io('http://localhost:3000')
-        this.game.socket = io('https://raijinhai-server.herokuapp.com')
+        this.game.socket = io('http://localhost:3000')
+        //this.game.socket = io('https://raijinhai-server.herokuapp.com')
         
     }
 

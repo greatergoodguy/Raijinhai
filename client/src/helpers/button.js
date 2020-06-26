@@ -6,7 +6,7 @@ export default class Button extends Phaser.GameObjects.Container {
     this.scene = scene
     this.onButtonClick = onButtonClick
 
-    this.xScale = 1.6
+    this.xScale = 2.0
 
     this.button = this.scene.add.sprite(0, 0, 'buttonLong_brown').setScale(this.xScale, 1.1).setInteractive()
     this.text = this.scene.add.text(0, 0, text, { fontSize: '32px', fill: '#fff' })
@@ -36,7 +36,9 @@ export default class Button extends Phaser.GameObjects.Container {
       this.button.setTexture('buttonLong_brown')
     }.bind(this));
 
-    this.x = x + (this.button.width/2) * this.xScale
+    //this.x = x + (this.button.width/2) * this.xScale
+    //this.y = y
+    this.x = x
     this.y = y
 
     this.scene.add.existing(this)

@@ -28,10 +28,10 @@ export default class PendingGameScene extends Phaser.Scene {
 
         var clickSound = this.sound.add('click')
 
-        let titleImage = this.add.image(0, 0, 'TitleImage');
+        let titleImage = this.add.image(0, 0, 'TableBoard');
         titleImage.setOrigin(0, 0)
 
-        this.buttonBack = new Button(this, 50, 300, 'Back', function() {
+        this.buttonBack = new Button(this, config.width/2, 880, 'Back', function() {
             clickSound.play()
             self.cameras.main.fadeOut(FADE_DURATION)
             invisiblePixel.setInteractive()
@@ -55,12 +55,14 @@ export default class PendingGameScene extends Phaser.Scene {
             invisiblePixel.disableInteractive()
         })
 
-        this.youText = this.add.text(400, 300, 'You: Not Ready', { fontSize: '32px', fill: '#000' })
+        this.youText = this.add.text(config.width/2, 300, 'You: Not Ready', { fontSize: '32px', fill: '#000' })
         this.youText.setColor('#ff0000')
-        this.opponentText = this.add.text(400, 400, 'Empty', { fontSize: '32px', fill: '#000' })
+        this.youText.setOrigin(0.5, 0)
+        this.opponentText = this.add.text(config.width/2, 400, 'No Opponent', { fontSize: '32px', fill: '#000' })
         this.opponentText.setColor('#ff0000')
+        this.opponentText.setOrigin(0.5, 0)
 
-        this.buttonReady = new Button(this, 400, 500, 'Ready', function() {
+        this.buttonReady = new Button(this, config.width/2, 500, 'Ready', function() {
             clickSound.play()
             areYouReady = !areYouReady
             if(areYouReady) {

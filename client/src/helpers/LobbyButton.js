@@ -8,9 +8,9 @@ export default class LobbyButton extends Phaser.GameObjects.Container {
     this.onButtonClick = onButtonClick
     this.gameData = gameData
 
-    this.xScale = 4.0
+    this.xScale = 2.0
 
-    this.button = this.scene.add.sprite(0, 0, 'blueButton2').setScale(this.xScale, 1.1).setInteractive()
+    this.button = this.scene.add.sprite(0, 0, 'buttonLong_brown').setScale(this.xScale, 1.1).setInteractive()
     this.text = this.scene.add.text(0, 0, text, { fontSize: '32px', fill: '#fff' })
     Phaser.Display.Align.In.Center(this.text, this.button)
 
@@ -18,23 +18,27 @@ export default class LobbyButton extends Phaser.GameObjects.Container {
     this.add(this.text)
 
     this.button.on('pointerdown', function () {
-      this.button.setTexture('blueButton3')
+      this.button.setTint(0xDCDCDC)
+      this.button.setTexture('buttonLong_brown_pressed')
     }.bind(this));
 
     this.button.on('pointerup', function () {
-      this.button.setTexture('blueButton2')
+      this.button.setTint()
+      this.button.setTexture('buttonLong_brown')
       this.onButtonClick()
     }.bind(this));
 
     this.button.on('pointerover', function () {
-      this.button.setTexture('blueButton4')
+      this.button.setTint(0xDCDCDC)
+      this.button.setTexture('buttonLong_brown')
     }.bind(this));
 
     this.button.on('pointerout', function () {
-      this.button.setTexture('blueButton2')
+      this.button.setTint()
+      this.button.setTexture('buttonLong_brown')
     }.bind(this));
 
-    this.x = x + (this.button.width/2) * this.xScale
+    this.x = x
     this.y = y
 
     this.scene.add.existing(this)
@@ -42,6 +46,7 @@ export default class LobbyButton extends Phaser.GameObjects.Container {
 
   updateText(newText) {
     this.text.setText(newText)
+    Phaser.Display.Align.In.Center(this.text, this.button)
   }
 
   setInteractive() {
@@ -50,5 +55,15 @@ export default class LobbyButton extends Phaser.GameObjects.Container {
 
   disableInteractive() {
     this.button.disableInteractive()
+  }
+
+  setDisabled() {
+    this.button.setTint(0x808080)
+    this.button.setTexture('buttonLong_brown_pressed')
+  }
+
+  setEnabled() {
+    this.button.setTint()
+    this.button.setTexture('buttonLong_brown')
   }
 }
