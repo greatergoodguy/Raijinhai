@@ -9,6 +9,22 @@ export default class PreloaderScene extends Phaser.Scene {
         })
     }
 
+    init() {
+        console.log("PreloaderScene: init()")
+        //  Inject our CSS
+        var element = document.createElement('style')
+        document.head.appendChild(element)
+        var sheet = element.sheet
+        var styles = '@font-face { font-family: "troika"; src: url("src/assets/fonts/ttf/troika.otf") format("opentype"); }\n'
+        sheet.insertRule(styles, 0)
+        styles = '@font-face { font-family: "Caroni"; src: url("src/assets/fonts/ttf/caroni.otf") format("opentype"); }\n'
+        sheet.insertRule(styles, 0)
+        styles = '@font-face { font-family: "Piedra-Regular"; src: url("src/assets/fonts/ttf/Piedra-Regular.ttf") format("opentype"); }\n'
+        sheet.insertRule(styles, 0)
+        styles = '@font-face { font-family: "Assistant-SemiBold"; src: url("src/assets/fonts/ttf/Assistant-SemiBold.ttf") format("opentype"); }\n'
+        sheet.insertRule(styles, 0)
+    }
+
     displayLoader() {
         let self = this
         let loadingText = this.add.text(config.width/2, config.height/2, "Loading... 0%").setFontSize(48)
@@ -27,9 +43,12 @@ export default class PreloaderScene extends Phaser.Scene {
 
     preload() {
         this.displayLoader()
+        this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js')
+
         this.load.image('TitleImage', 'src/assets/TitleImage.png')
         this.load.image('TitleImageShut', 'src/assets/TitleImageShut.png')
-        this.load.image('TableBoard', 'src/assets/TableBoard.png')
+        //this.load.image('TableBoard', 'src/assets/TableBoard.png')
+        this.load.image('TableBoard', 'src/assets/TableBoard2.jpeg')
 
         this.load.image('blueButton0', 'src/assets/ui/blue_button00.png')
         this.load.image('blueButton1', 'src/assets/ui/blue_button01.png')
@@ -62,10 +81,17 @@ export default class PreloaderScene extends Phaser.Scene {
 
         this.game.socket = io('http://localhost:3000')
         //this.game.socket = io('https://raijinhai-server.herokuapp.com')
-        
     }
 
-    create() {}
+    create() {
+        WebFont.load({
+            custom: {
+                families: [ 'troika', 'Caroni', 'Piedra-Regular', 'Assistant-SemiBold' ]
+            },
+            active: function ()
+            {}
+        })
+    }
 
     update() {}
 }

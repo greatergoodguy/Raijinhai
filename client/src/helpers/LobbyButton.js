@@ -11,7 +11,7 @@ export default class LobbyButton extends Phaser.GameObjects.Container {
     this.xScale = 2.0
 
     this.button = this.scene.add.sprite(0, 0, 'buttonLong_brown').setScale(this.xScale, 1.1).setInteractive()
-    this.text = this.scene.add.text(0, 0, text, { fontSize: '32px', fill: '#fff' })
+    this.text = this.scene.add.text(0, 0, text, { fontFamily: 'Assistant-SemiBold', fontSize: '32px', fill: '#fff' })
     Phaser.Display.Align.In.Center(this.text, this.button)
 
     this.add(this.button)

@@ -103,11 +103,11 @@ export default class LobbyScene extends Phaser.Scene {
         var numberOfPlayers = Object.keys(gameData.players).length
 
         if(numberOfPlayers >= 2) {
-            lobbyButton.updateText('Full (' + numberOfPlayers + '/2)')   
+            lobbyButton.updateText('Full\t\t(' + numberOfPlayers + '/2)')   
             lobbyButton.setDisabled()
             lobbyButton.disableInteractive()
         } else {
-            lobbyButton.updateText('Room ' + roomNumber + ' (' + numberOfPlayers + '/2)')   
+            lobbyButton.updateText('Room ' + roomNumber + '\t\t(' + numberOfPlayers + '/2)')   
             lobbyButton.setEnabled()
             lobbyButton.setInteractive()
         }
