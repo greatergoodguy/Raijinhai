@@ -65,7 +65,7 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.image('magentaCardFront', 'src/assets/MagentaCardFront.png')
         this.load.image('magentaCardBack', 'src/assets/MagentaCardBack.png')
 
-        this.load.image('Card01Soldier', 'src/assets/Card01Soldier.png')
+        this.load.image('Card01Soldier', 'src/assets/pieces/Card01Soldier.png')
         this.load.image('Card02Calvary', 'src/assets/Card02Calvary.png')
         this.load.image('Card03Elephant', 'src/assets/Card03Elephant.png')
         this.load.image('Card04Shogun', 'src/assets/Card04Shogun.png')
