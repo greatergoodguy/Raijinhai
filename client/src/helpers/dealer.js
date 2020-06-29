@@ -22,11 +22,11 @@ export default class Dealer {
             let cardYPos1 = 720
             let cardYPos2 = 870
             scene.yourCards.push(new Card(scene, xOffset + offsetInterval*0, cardYPos1).render('Card01Soldier'))
-            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*0.5, cardYPos1).render('Card01Soldier'))
-            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*1.5, cardYPos1).render('Card02Calvary'))
-            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*2, cardYPos1).render('Card02Calvary'))
-            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*3, cardYPos1).render('Card03Elephant'))
-            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*3.5, cardYPos1).render('Card03Elephant'))
+            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*0, cardYPos1).render('Card01Soldier'))
+            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*1, cardYPos1).render('Card02Calvary'))
+            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*1, cardYPos1).render('Card02Calvary'))
+            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*2, cardYPos1).render('Card03Elephant'))
+            scene.yourCards.push(new Card(scene, xOffset + offsetInterval*2, cardYPos1).render('Card03Elephant'))
             
             scene.yourCards.push(new Card(scene, xOffset + offsetInterval*1, cardYPos2).render('Card04Shogun'))
             scene.yourCards.push(new Card(scene, xOffset + offsetInterval*2, cardYPos2).render('Card05Queen'))
