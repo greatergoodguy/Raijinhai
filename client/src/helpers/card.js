@@ -5,11 +5,8 @@ export default class Card {
         this.originY = originY
 
         this.render = (sprite) => {
-            let card = scene.add.image(self.originX, self.originY, sprite).setScale(0.18, 0.18).setInteractive()
-            if(sprite == 'Card01Soldier' || sprite == 'Card02Calvary' || sprite == 'Card03Elephant') {
-                card.setScale(0.5, 0.5)
-            }
-            card.data = { 'originX': self.originX, 'originY': self.originY}
+            let card = scene.add.image(self.originX, self.originY, sprite).setScale(0.3, 0.3).setInteractive()
+            card.data = { 'originX': self.originX, 'originY': self.originY, 'isHand': true }
             scene.input.setDraggable(card)
             return card
         }

@@ -60,19 +60,14 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.image('buttonLong_brown_pressed', 'src/assets/ui/buttonLong_brown_pressed.png')
         this.load.image('InvisiblePixel', 'src/assets/ui/InvisiblePixel.png')
 
-        this.load.image('cyanCardFront', 'src/assets/CyanCardFront.png')
-        this.load.image('cyanCardBack', 'src/assets/CyanCardBack.png')
-        this.load.image('magentaCardFront', 'src/assets/MagentaCardFront.png')
-        this.load.image('magentaCardBack', 'src/assets/MagentaCardBack.png')
-
-        this.load.image('Card01Soldier', 'src/assets/pieces/Card01Soldier.png')
-        this.load.image('Card02Calvary', 'src/assets/pieces/Card02Calvary.png')
-        this.load.image('Card03Elephant', 'src/assets/pieces/Card03Elephant.png')
-        this.load.image('Card04Shogun', 'src/assets/Card04Shogun.png')
-        this.load.image('Card05Queen', 'src/assets/Card05Queen.png')
-        this.load.image('Card06King', 'src/assets/Card06King.png')
-        this.load.image('Card07Indra', 'src/assets/Card07Indra.png')
-        this.load.image('CardTemplateBack', 'src/assets/CardTemplateBack.png')
+        this.load.image('Card01Soldier', 'src/assets/pieces/01soldier.jpeg')
+        this.load.image('Card02Calvary', 'src/assets/pieces/02cavalry.jpeg')
+        this.load.image('Card03Elephant', 'src/assets/pieces/03elephant.jpeg')
+        this.load.image('Card04Shogun', 'src/assets/pieces/04shogun.jpeg')
+        this.load.image('Card05Queen', 'src/assets/pieces/05queen.jpeg')
+        this.load.image('Card06King', 'src/assets/pieces/06king.jpeg')
+        this.load.image('Card07Indra', 'src/assets/pieces/07indra.jpeg')
+        this.load.image('CardTemplateBack', 'src/assets/pieces/CardBack.png')
 
         this.load.bitmapFont('khodijah', 'src/assets/fonts/khodijah.png', 'src/assets/fonts/khodijah.fnt')
 

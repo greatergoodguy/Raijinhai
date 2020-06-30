@@ -9,7 +9,7 @@ import GameScene from "../scenes/GameScene"
 export default {
     type: Phaser.AUTO,
     parent: "phaser-example",
-    width: 540,
+    width: 1450,
     height: 960,
     scene: [
         PreloaderScene,

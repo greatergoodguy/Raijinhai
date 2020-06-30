@@ -41,15 +41,25 @@ export default class Game extends Phaser.Scene {
         titleImageShut.setOrigin(0, 0)
 
         this.doorSound = this.sound.add('door')
+        this.sound.pauseOnBlur = false
+        
 
+        let zoneOffsetY = 140
         this.zone = new Zone(this)
-        this.playerDropZone = this.zone.renderZone(config.width/2, 520)
+        this.playerDropZone = this.zone.renderZone(config.width/2, config.height/2 + zoneOffsetY)
         this.playerDropZoneOutline = this.zone.renderOutline(this.playerDropZone)
 
-        this.opponentDropZone = this.zone.renderZone(1100, 375)
+        this.opponentDropZone = this.zone.renderZone(config.width/2, config.height/2 - zoneOffsetY)
         this.opponentDropZone.disableInteractive()
         this.opponentDropZoneOutline = this.zone.renderOutline(this.opponentDropZone)
         
+        this.previewCard = this.add.image(50, config.height/2, 'CardTemplateBack').setScale(0.7, 0.7)
+        this.previewCard.setOrigin(0, 0.5)
+
+        this.zonePlaceholderCard = this.add.image(config.width/2, config.height/2 + zoneOffsetY, 'CardTemplateBack').setScale(0.3, 0.3)
+        this.zonePlaceholderCard.setOrigin(0.5, 0.5)
+        this.zonePlaceholderCard.visible = false
+
         this.dealer = new Dealer(this)
 
         let socket = this.game.socket
@@ -58,16 +68,20 @@ export default class Game extends Phaser.Scene {
         let playerText = this.add.text(75, 520, ['']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF').setInteractive()
         this.gameStart = this.add.text(75, 350, ['GAME START']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF').setInteractive()
         this.gameStart.visible = false
-        this.zoneText = this.add.text(730, 375, ['']).setFontSize(30).setFontFamily('Trebuchet MS').setColor('#ADD8E6').setInteractive()
+        this.zoneText = this.add.text(config.width/2, config.height/2, ['']).setFontSize(30).setFontFamily('Trebuchet MS').setColor('#ADD8E6').setInteractive()
         this.zoneText.setStroke('#de77ae', 16)
         this.zoneText.setShadow(2, 2, '#333333', 2, true, true)
         this.zoneText.setOrigin(0.5, 0.5)
-        this.yourZoneText = this.add.text(config.width/2, 520, ['Your Zone']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#AA3509')
+        this.yourZoneText = this.add.text(0, 0, ['Your Zone']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#AA3509')
         this.yourZoneText.setOrigin(0.5, 0)
-        this.add.text(1050, 520, ['Opponent Zone']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF')
+        Phaser.Display.Align.In.BottomCenter(this.yourZoneText, this.playerDropZone)
+        this.opponentZoneText = this.add.text(0, 0, ['Opponent Zone']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF')
+        this.opponentZoneText.setOrigin(0.5, 0.5)
+        this.opponentZoneText.rotation = Math.PI
+        Phaser.Display.Align.In.TopCenter(this.opponentZoneText, this.opponentDropZone)
 
         // TODO: Delete Me
-        // self.dealer.dealCards()
+        //self.dealer.dealCards()
 
         socket.on('dealCards', function(gameData, invertedGameData) {
             console.log(gameData)
@@ -103,12 +117,13 @@ export default class Game extends Phaser.Scene {
 
         socket.on('turnFinished', function(roundData) {
             console.log(roundData)
+            this.zonePlaceholderCard.visible = false
             self.opponentZoneCard.setTexture(roundData[socket.id]['opponentPiece'])
             self.zoneText.setText(roundData[socket.id]['zoneText'])
-            self.doorSound.play()
+            this.doorSound.play()
             titleImage.visible = true
             titleImageShut.visible = false
-        })
+        }.bind(this))
 
         socket.on('newRound', function(roundData) {
             console.log(roundData)
@@ -116,7 +131,7 @@ export default class Game extends Phaser.Scene {
 
             self.zoneText.setText("")
 
-            self.doorSound.play()
+            this.doorSound.play()
             titleImage.visible = false
             titleImageShut.visible = true
 
@@ -138,7 +153,7 @@ export default class Game extends Phaser.Scene {
                 self.opponentZoneCard.y = self.opponentZoneCard.data['originY']
                 self.opponentCards.unshift(self.opponentZoneCard)
             }
-        })
+        }.bind(this))
 
         this.gameStart.on('pointerdown', function () {
             socket.emit('dealCards')
@@ -151,6 +166,13 @@ export default class Game extends Phaser.Scene {
         this.gameStart.on('pointerout', function () {
             self.gameStart.setColor('#00FFFF')
         })
+
+        this.input.on('pointerover', function(pointer, gameObject) {
+            if(gameObject.length >= 1 && gameObject[0].data && gameObject[0].data.isHand) {
+                let textureKey = gameObject[0].texture.key
+                this.previewCard.setTexture(textureKey)
+            }
+        }.bind(this))
 
         this.input.on('dragstart', function(pointer, gameObject) {
             gameObject.setTint(0xff69b4)
@@ -175,10 +197,12 @@ export default class Game extends Phaser.Scene {
             dropZone.data.values.cards++
             gameObject.x = dropZone.x
             gameObject.y = dropZone.y
-            gameObject.disableInteractive()
+            //gameObject.disableInteractive()
             self.playerZoneCard = gameObject
             socket.emit('cardPlayed', self.gameId, gameObject.texture.key, socket.id)
-        })
+            this.zonePlaceholderCard.visible = true
+            self.children.bringToTop(this.zonePlaceholderCard)
+        }.bind(this))
 
         socket.on("player left", this.playerLeft.bind(this))
 
