@@ -47,13 +47,13 @@ export default class Game extends Phaser.Scene {
         let zoneOffsetY = 140
         this.zone = new Zone(this)
         this.playerDropZone = this.zone.renderZone(config.width/2, config.height/2 + zoneOffsetY)
-        this.playerDropZoneOutline = this.zone.renderOutline(this.playerDropZone)
+        //this.playerDropZoneOutline = this.zone.renderOutline(this.playerDropZone)
 
         this.opponentDropZone = this.zone.renderZone(config.width/2, config.height/2 - zoneOffsetY)
         this.opponentDropZone.disableInteractive()
-        this.opponentDropZoneOutline = this.zone.renderOutline(this.opponentDropZone)
+        //this.opponentDropZoneOutline = this.zone.renderOutline(this.opponentDropZone)
         
-        this.previewCard = this.add.image(50, config.height/2, 'CardTemplateBack').setScale(0.7, 0.7)
+        this.previewCard = this.add.image(25, config.height/2, 'CardTemplateBack').setScale(0.7, 0.7)
         this.previewCard.setOrigin(0, 0.5)
 
         this.zonePlaceholderCard = this.add.image(config.width/2, config.height/2 + zoneOffsetY, 'CardTemplateBack').setScale(0.3, 0.3)
@@ -74,14 +74,16 @@ export default class Game extends Phaser.Scene {
         this.zoneText.setOrigin(0.5, 0.5)
         this.yourZoneText = this.add.text(0, 0, ['Your Zone']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#AA3509')
         this.yourZoneText.setOrigin(0.5, 0)
+        this.yourZoneText.visible = false
         Phaser.Display.Align.In.BottomCenter(this.yourZoneText, this.playerDropZone)
         this.opponentZoneText = this.add.text(0, 0, ['Opponent Zone']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF')
         this.opponentZoneText.setOrigin(0.5, 0.5)
         this.opponentZoneText.rotation = Math.PI
+        this.opponentZoneText.visible = false
         Phaser.Display.Align.In.TopCenter(this.opponentZoneText, this.opponentDropZone)
 
         // TODO: Delete Me
-        //self.dealer.dealCards()
+        self.dealer.dealCards()
 
         socket.on('dealCards', function(gameData, invertedGameData) {
             console.log(gameData)

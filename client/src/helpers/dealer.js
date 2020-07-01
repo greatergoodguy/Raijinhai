@@ -6,7 +6,7 @@ export default class Dealer {
             let xOffset = 80
             let offsetInterval = 143
 
-            let opponentCardYPos1 = 105
+            let opponentCardYPos1 = 101
             scene.opponentCards.push(new Card(scene, xOffset + offsetInterval*0, opponentCardYPos1).render('CardTemplateBack').disableInteractive())
             scene.opponentCards.push(new Card(scene, xOffset + offsetInterval*1, opponentCardYPos1).render('CardTemplateBack').disableInteractive())
             scene.opponentCards.push(new Card(scene, xOffset + offsetInterval*2, opponentCardYPos1).render('CardTemplateBack').disableInteractive())
@@ -18,7 +18,7 @@ export default class Dealer {
             scene.opponentCards.push(new Card(scene, xOffset + offsetInterval*8, opponentCardYPos1).render('CardTemplateBack').disableInteractive())
             scene.opponentCards.push(new Card(scene, xOffset + offsetInterval*9, opponentCardYPos1).render('CardTemplateBack').disableInteractive())
 
-            let cardYPos1 = 850
+            let cardYPos1 = 858
             scene.yourCards.push(new Card(scene, xOffset + offsetInterval*0, cardYPos1).render('Card05Queen'))
             scene.yourCards.push(new Card(scene, xOffset + offsetInterval*1, cardYPos1).render('Card01Soldier'))
             scene.yourCards.push(new Card(scene, xOffset + offsetInterval*2, cardYPos1).render('Card01Soldier'))

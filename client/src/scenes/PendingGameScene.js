@@ -55,12 +55,15 @@ export default class PendingGameScene extends Phaser.Scene {
             invisiblePixel.disableInteractive()
         })
 
+        this.youSquare = this.add.sprite(config.width/2, 300, 'whiteSquare').setScale(4.0, 0.6)
         this.youText = this.add.text(config.width/2, 300, 'You: Not Ready', { fontSize: '32px', fill: '#000' })
         this.youText.setColor('#ff0000')
-        this.youText.setOrigin(0.5, 0)
+        this.youText.setOrigin(0.5, 0.5)
+
+        this.opponentSquare = this.add.sprite(config.width/2, 400, 'whiteSquare').setScale(4.0, 0.6)
         this.opponentText = this.add.text(config.width/2, 400, 'No Opponent', { fontSize: '32px', fill: '#000' })
         this.opponentText.setColor('#ff0000')
-        this.opponentText.setOrigin(0.5, 0)
+        this.opponentText.setOrigin(0.5, 0.5)
 
         this.buttonReady = new Button(this, config.width/2, 500, 'Ready', function() {
             clickSound.play()

@@ -23,6 +23,8 @@ export default class PreloaderScene extends Phaser.Scene {
         sheet.insertRule(styles, 0)
         styles = '@font-face { font-family: "Assistant-SemiBold"; src: url("src/assets/fonts/ttf/Assistant-SemiBold.ttf") format("opentype"); }\n'
         sheet.insertRule(styles, 0)
+        styles = '@font-face { font-family: "RobotoSlab-Regular"; src: url("src/assets/fonts/ttf/RobotoSlab-Regular.ttf") format("opentype"); }\n'
+        sheet.insertRule(styles, 0)
     }
 
     displayLoader() {
@@ -35,8 +37,8 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.on('complete', function() {
             self.cameras.main.fadeOut(FADE_DURATION)
             self.cameras.main.once('camerafadeoutcomplete', function (camera) {
-                self.scene.start('Title')
-                //self.scene.start('Game')
+                //self.scene.start('Title')
+                self.scene.start('Game')
             })
         })
     }
@@ -47,8 +49,7 @@ export default class PreloaderScene extends Phaser.Scene {
 
         this.load.image('TitleImage', 'src/assets/TitleImage.png')
         this.load.image('TitleImageShut', 'src/assets/TitleImageShut.png')
-        //this.load.image('TableBoard', 'src/assets/TableBoard.png')
-        this.load.image('TableBoard', 'src/assets/TableBoard2.jpeg')
+        this.load.image('TableBoard', 'src/assets/board/Gameboard.png')
 
         this.load.image('blueButton0', 'src/assets/ui/blue_button00.png')
         this.load.image('blueButton1', 'src/assets/ui/blue_button01.png')
@@ -59,6 +60,7 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.image('buttonLong_brown', 'src/assets/ui/buttonLong_brown.png')
         this.load.image('buttonLong_brown_pressed', 'src/assets/ui/buttonLong_brown_pressed.png')
         this.load.image('InvisiblePixel', 'src/assets/ui/InvisiblePixel.png')
+        this.load.image('whiteSquare', 'src/assets/ui/whiteSquare.png')
 
         this.load.image('Card01Soldier', 'src/assets/pieces/01soldier.jpeg')
         this.load.image('Card02Calvary', 'src/assets/pieces/02cavalry.jpeg')
@@ -81,7 +83,7 @@ export default class PreloaderScene extends Phaser.Scene {
     create() {
         WebFont.load({
             custom: {
-                families: [ 'troika', 'Caroni', 'Piedra-Regular', 'Assistant-SemiBold' ]
+                families: [ 'troika', 'Caroni', 'Piedra-Regular', 'Assistant-SemiBold', 'RobotoSlab-Regular' ]
             },
             active: function ()
             {}
