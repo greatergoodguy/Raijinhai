@@ -31,7 +31,7 @@ export default class PendingGameScene extends Phaser.Scene {
         let titleImage = this.add.image(0, 0, 'TableBoard');
         titleImage.setOrigin(0, 0)
 
-        this.buttonBack = new Button(this, config.width/2, 880, 'Back', function() {
+        this.buttonBack = new Button(this, config.width/2, 850, 'Back', function() {
             clickSound.play()
             self.cameras.main.fadeOut(FADE_DURATION)
             invisiblePixel.setInteractive()
@@ -42,7 +42,7 @@ export default class PendingGameScene extends Phaser.Scene {
             })
         })
 
-        this.titleBitmapText = this.add.bitmapText(config.width/2, 50, 'khodijah', title, 128)
+        this.titleBitmapText = this.add.bitmapText(config.width/2, 30, 'khodijah', title, 128)
         this.titleBitmapText.setOrigin(0.5, 0)
 
         let invisiblePixel = this.add.image(0, 0, 'InvisiblePixel').setScale(config.width, config.height)
@@ -56,24 +56,28 @@ export default class PendingGameScene extends Phaser.Scene {
         })
 
         this.youSquare = this.add.sprite(config.width/2, 300, 'whiteSquare').setScale(4.0, 0.6)
-        this.youText = this.add.text(config.width/2, 300, 'You: Not Ready', { fontSize: '32px', fill: '#000' })
-        this.youText.setColor('#ff0000')
-        this.youText.setOrigin(0.5, 0.5)
+        this.youSquare.setTint(0xc1bca0)
+        this.youText = this.add.text(config.width/2 - 170, 300, 'You: Not Ready', { fontSize: '32px', fill: '#000' })
+        this.youText.setFontFamily('RobotoSlab-Regular')
+        this.youText.setColor('#c90b0b')
+        this.youText.setOrigin(0, 0.5)
 
         this.opponentSquare = this.add.sprite(config.width/2, 400, 'whiteSquare').setScale(4.0, 0.6)
-        this.opponentText = this.add.text(config.width/2, 400, 'No Opponent', { fontSize: '32px', fill: '#000' })
-        this.opponentText.setColor('#ff0000')
-        this.opponentText.setOrigin(0.5, 0.5)
+        this.opponentSquare.setTint(0xc1bca0)
+        this.opponentText = this.add.text(config.width/2 - 170, 400, 'No Opponent', { fontSize: '32px', fill: '#000' })
+        this.opponentText.setFontFamily('RobotoSlab-Regular')
+        this.opponentText.setColor('#c90b0b')
+        this.opponentText.setOrigin(0, 0.5)
 
         this.buttonReady = new Button(this, config.width/2, 500, 'Ready', function() {
             clickSound.play()
             areYouReady = !areYouReady
             if(areYouReady) {
                 self.youText.setText('You: Ready')
-                self.youText.setColor('#00ff00')
+                self.youText.setColor('#138808')
             } else {
                 self.youText.setText('You: Not Ready')
-                self.youText.setColor('#ff0000')
+                self.youText.setColor('#c90b0b')
             }
             socket.emit('on player ready', {gameId: self.gameData.id, playerId: socket.id, ready: areYouReady})
         })
@@ -145,13 +149,13 @@ export default class PendingGameScene extends Phaser.Scene {
 
         if(!opponentId) {
             this.opponentText.setText('No Opponent')
-            this.opponentText.setColor('#ff0000')
+            this.opponentText.setColor('#c90b0b')
         } else if(!opponentData.ready) {
             this.opponentText.setText('Opponent: Not Ready')
-            this.opponentText.setColor('#ff0000')
+            this.opponentText.setColor('#c90b0b')
         } else {
             this.opponentText.setText('Opponent: Ready')
-            this.opponentText.setColor('#00ff00')
+            this.opponentText.setColor('#138808')
         }
     }
 }

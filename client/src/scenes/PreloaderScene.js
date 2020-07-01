@@ -37,8 +37,8 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.on('complete', function() {
             self.cameras.main.fadeOut(FADE_DURATION)
             self.cameras.main.once('camerafadeoutcomplete', function (camera) {
-                //self.scene.start('Title')
-                self.scene.start('Game')
+                self.scene.start('Title')
+                //self.scene.start('Game')
             })
         })
     }

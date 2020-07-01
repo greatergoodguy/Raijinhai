@@ -66,24 +66,24 @@ export default class Game extends Phaser.Scene {
         socket.emit("on game start", {gameId: this.gameId, playerId: socket.id})
 
         let playerText = this.add.text(75, 520, ['']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF').setInteractive()
+        playerText.visible = false
         this.gameStart = this.add.text(75, 350, ['GAME START']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF').setInteractive()
         this.gameStart.visible = false
-        this.zoneText = this.add.text(config.width/2, config.height/2, ['']).setFontSize(30).setFontFamily('Trebuchet MS').setColor('#ADD8E6').setInteractive()
-        this.zoneText.setStroke('#de77ae', 16)
+        this.zoneText = this.add.text(config.width/2, config.height/2, ['']).setFontSize(30).setFontFamily('Piedra-Regular').setColor('#fc5e21').setInteractive()
+        this.zoneText.setStroke('#70146a', 8)
         this.zoneText.setShadow(2, 2, '#333333', 2, true, true)
         this.zoneText.setOrigin(0.5, 0.5)
-        this.yourZoneText = this.add.text(0, 0, ['Your Zone']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#AA3509')
+        
+        this.yourZoneText = this.add.text(0, 0, ['Your Zone']).setFontSize(18).setFontFamily('RobotoSlab-Regular').setColor('#138808')
         this.yourZoneText.setOrigin(0.5, 0)
-        this.yourZoneText.visible = false
         Phaser.Display.Align.In.BottomCenter(this.yourZoneText, this.playerDropZone)
-        this.opponentZoneText = this.add.text(0, 0, ['Opponent Zone']).setFontSize(18).setFontFamily('Trebuchet MS').setColor('#00FFFF')
+        this.opponentZoneText = this.add.text(0, 0, ['Opponent Zone']).setFontSize(18).setFontFamily('RobotoSlab-Regular').setColor('#c90b0b')
         this.opponentZoneText.setOrigin(0.5, 0.5)
         this.opponentZoneText.rotation = Math.PI
-        this.opponentZoneText.visible = false
         Phaser.Display.Align.In.TopCenter(this.opponentZoneText, this.opponentDropZone)
 
         // TODO: Delete Me
-        self.dealer.dealCards()
+        // self.dealer.dealCards()
 
         socket.on('dealCards', function(gameData, invertedGameData) {
             console.log(gameData)

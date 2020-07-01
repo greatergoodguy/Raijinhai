@@ -24,7 +24,7 @@ export default class LobbyScene extends Phaser.Scene {
         let titleImage = this.add.image(0, 0, 'TableBoard');
         titleImage.setOrigin(0, 0)
 
-        this.buttonBack = new Button(this, config.width/2, 880, 'Back', function() {
+        this.buttonBack = new Button(this, config.width/2, 850, 'Back', function() {
             clickSound.play()
             self.cameras.main.fadeOut(FADE_DURATION)
             invisiblePixel.setInteractive()
@@ -33,7 +33,7 @@ export default class LobbyScene extends Phaser.Scene {
             })
         })
 
-        this.titleBitmapText = this.add.bitmapText(config.width/2, 50, 'khodijah', 'Lobby', 128)
+        this.titleBitmapText = this.add.bitmapText(config.width/2, 30, 'khodijah', 'Lobby', 128)
         this.titleBitmapText.setOrigin(0.5, 0)
 
         this.invisiblePixel = this.add.image(0, 0, 'InvisiblePixel').setScale(config.width, config.height)

@@ -45,7 +45,7 @@ export default class TitleScene extends Phaser.Scene {
             })
         });
 
-        this.titleBitmapText = this.add.bitmapText(config.width/2, 50, 'khodijah', 'Raijinhai', TITLE_FONT_SIZE)
+        this.titleBitmapText = this.add.bitmapText(config.width/2, 30, 'khodijah', 'Raijinhai', TITLE_FONT_SIZE)
         this.titleBitmapText.setOrigin(0.5, 0)
 
         let invisiblePixel = this.add.image(0, 0, 'InvisiblePixel').setScale(config.width, config.height)
