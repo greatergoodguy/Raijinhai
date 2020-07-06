@@ -47,8 +47,6 @@ export default class PreloaderScene extends Phaser.Scene {
         this.displayLoader()
         this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js')
 
-        this.load.image('TitleImage', 'src/assets/TitleImage.png')
-        this.load.image('TitleImageShut', 'src/assets/TitleImageShut.png')
         this.load.image('TableBoard', 'src/assets/board/Gameboard.png')
 
         this.load.image('blueButton0', 'src/assets/ui/blue_button00.png')
@@ -62,13 +60,13 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.image('InvisiblePixel', 'src/assets/ui/InvisiblePixel.png')
         this.load.image('whiteSquare', 'src/assets/ui/whiteSquare.png')
 
-        this.load.image('Card01Soldier', 'src/assets/pieces/01soldier.jpeg')
-        this.load.image('Card02Calvary', 'src/assets/pieces/02cavalry.jpeg')
-        this.load.image('Card03Elephant', 'src/assets/pieces/03elephant.jpeg')
-        this.load.image('Card04Shogun', 'src/assets/pieces/04shogun.jpeg')
-        this.load.image('Card05Queen', 'src/assets/pieces/05queen.jpeg')
-        this.load.image('Card06King', 'src/assets/pieces/06king.jpeg')
-        this.load.image('Card07Indra', 'src/assets/pieces/07indra.jpeg')
+        this.load.image('Card01Soldier', 'src/assets/pieces/01soldier.png')
+        this.load.image('Card02Calvary', 'src/assets/pieces/02cavalry.png')
+        this.load.image('Card03Elephant', 'src/assets/pieces/03elephant.png')
+        this.load.image('Card04Shogun', 'src/assets/pieces/04shogun.png')
+        this.load.image('Card05Queen', 'src/assets/pieces/05queen.png')
+        this.load.image('Card06King', 'src/assets/pieces/06king.png')
+        this.load.image('Card07Indra', 'src/assets/pieces/07indra.png')
         this.load.image('CardTemplateBack', 'src/assets/pieces/CardBack.png')
 
         this.load.bitmapFont('khodijah', 'src/assets/fonts/khodijah.png', 'src/assets/fonts/khodijah.fnt')
@@ -76,8 +74,8 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.audio("click", "src/assets/sounds/click.ogg")
         this.load.audio("door", "src/assets/sounds/door.mp3")
 
-        //this.game.socket = io('http://localhost:3000')
-        this.game.socket = io('https://raijinhai-server.herokuapp.com')
+        this.game.socket = io('http://localhost:3000')
+        // this.game.socket = io('https://raijinhai-server.herokuapp.com')
     }
 
     create() {
