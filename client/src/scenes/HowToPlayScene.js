@@ -16,7 +16,7 @@ export default class HowToPlayScene extends Phaser.Scene {
 
         var clickSound = this.sound.add('click')
 
-        let titleImage = this.add.image(0, 0, 'TableBoard');
+        let titleImage = this.add.image(0, 0, 'TitleScreen');
         titleImage.setOrigin(0, 0)
 
         this.button1 = new Button(this, config.width/2, 850, 'Back', function() {

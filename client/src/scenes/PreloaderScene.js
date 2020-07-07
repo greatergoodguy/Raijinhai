@@ -48,6 +48,7 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js')
 
         this.load.image('TableBoard', 'src/assets/board/Gameboard.png')
+        this.load.image('TitleScreen', 'src/assets/ui/TitleScreen.png')
 
         this.load.image('blueButton0', 'src/assets/ui/blue_button00.png')
         this.load.image('blueButton1', 'src/assets/ui/blue_button01.png')
@@ -74,8 +75,8 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.audio("click", "src/assets/sounds/click.ogg")
         this.load.audio("door", "src/assets/sounds/door.mp3")
 
-        //this.game.socket = io('http://localhost:3000')
-        this.game.socket = io('https://raijinhai-server.herokuapp.com')
+        this.game.socket = io('http://localhost:3000')
+        //this.game.socket = io('https://raijinhai-server.herokuapp.com')
     }
 
     create() {

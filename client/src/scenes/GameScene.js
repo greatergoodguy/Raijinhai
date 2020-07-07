@@ -83,7 +83,7 @@ export default class Game extends Phaser.Scene {
         Phaser.Display.Align.In.TopCenter(this.opponentZoneText, this.opponentDropZone)
 
         // TODO: Delete Me
-        // self.dealer.dealCards()
+        //self.dealer.dealCards()
 
         socket.on('dealCards', function(gameData, invertedGameData) {
             console.log(gameData)
@@ -113,6 +113,7 @@ export default class Game extends Phaser.Scene {
                 playedCard.x = self.opponentDropZone.x;
                 playedCard.y = self.opponentDropZone.y
                 self.opponentZoneCard = playedCard
+                self.opponentZoneCard.rotation = Math.PI
             }
 
         })
@@ -153,6 +154,7 @@ export default class Game extends Phaser.Scene {
                 self.opponentZoneCard.setTexture('CardTemplateBack')
                 self.opponentZoneCard.x = self.opponentZoneCard.data['originX']
                 self.opponentZoneCard.y = self.opponentZoneCard.data['originY']
+                self.opponentZoneCard.rotation = 0
                 self.opponentCards.unshift(self.opponentZoneCard)
             }
         }.bind(this))

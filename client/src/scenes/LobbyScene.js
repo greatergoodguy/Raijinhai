@@ -21,7 +21,7 @@ export default class LobbyScene extends Phaser.Scene {
         this.clickSound = this.sound.add('click')
         let clickSound = this.clickSound
 
-        let titleImage = this.add.image(0, 0, 'TableBoard');
+        let titleImage = this.add.image(0, 0, 'TitleScreen');
         titleImage.setOrigin(0, 0)
 
         this.buttonBack = new Button(this, config.width/2, 850, 'Back', function() {

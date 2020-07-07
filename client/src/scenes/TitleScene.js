@@ -16,7 +16,7 @@ export default class TitleScene extends Phaser.Scene {
 
         var clickSound = this.sound.add('click')
 
-        let titleImage = this.add.image(0, 0, 'TableBoard')
+        let titleImage = this.add.image(0, 0, 'TitleScreen')
         titleImage.setOrigin(0, 0)
 
         this.button1 = new Button(this, config.width/2, 300, 'Start Game', function() {
@@ -28,7 +28,7 @@ export default class TitleScene extends Phaser.Scene {
             })
         });
 
-        this.button2 = new Button(this, config.width/2, 400, 'How To Play', function() {
+        this.button2 = new Button(this, config.width/2, 500, 'How To Play', function() {
             clickSound.play()
             self.cameras.main.fadeOut(FADE_DURATION)
             invisiblePixel.setInteractive()
@@ -36,7 +36,9 @@ export default class TitleScene extends Phaser.Scene {
                 self.scene.start('How To Play')
             })
         });
-        this.button3 = new Button(this, config.width/2, 500, 'Credits', function() {
+        this.button2.visible = false
+
+        this.button3 = new Button(this, config.width/2, 400, 'Credits', function() {
             clickSound.play()
             self.cameras.main.fadeOut(FADE_DURATION)
             invisiblePixel.setInteractive()
@@ -56,6 +58,14 @@ export default class TitleScene extends Phaser.Scene {
         self.cameras.main.once('camerafadeincomplete', function (camera) {
             invisiblePixel.disableInteractive()
         })
+
+
+        this.backgroundSquare = this.add.sprite(config.width/2, 500, 'whiteSquare').setScale(4, 3.5)
+        this.backgroundSquare.setOrigin(0.5, 0)
+        this.backgroundSquare.setTint(0x746865)
+
+        this.credits = "How To Play:\n\nEach round, both players select\none combatant to engage in a\n1 v 1 duel. The one with the\nhigher attack wins the round.\n\nWin the game by destroying\nthe opponent's King."
+        this.text = this.add.text(config.width/2 - 180, 520, this.credits, { fontFamily: 'RobotoSlab-Regular', fontSize: '24px', fill: '#fff' })
     }
 
     update() {}
